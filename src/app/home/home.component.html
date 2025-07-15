@@ -1,0 +1,49 @@
+<app-navbar (search)="searchQuery = $event"></app-navbar>
+
+<div class="genre-toggle">
+  <button
+    [class.active]="selectedGenre === 'All'"
+    (click)="filterByGenre('All')"
+  >
+    All
+  </button>
+  <button
+    *ngFor="let genre of genres"
+    [class.active]="selectedGenre === genre"
+    (click)="filterByGenre(genre)"
+  >
+    {{ genre }}
+  </button>
+  
+</div>
+
+
+
+<div class="book-list">
+  <div class="book-card"
+    *ngFor="let book of filteredBooks | search:searchQuery"
+    [routerLink]="['/book', book.bookId]">
+
+
+
+    <div class="ribbon">Buy 2 Get 1</div>
+
+    <img [src]="book.coverImage" alt="{{ book.title }} cover" class="book-cover" />
+
+    <div class="book-info">
+      <h3 class="book-title">{{ book.title }}</h3>
+      <p class="book-author">by {{ book.author }}</p>
+
+      <div class="price-row">
+        <span class="price-old">Rs. {{ book.priceBuy + 200 }}</span>
+        <span class="price-new">Rs. {{ book.priceBuy }}</span>
+      </div>
+
+      <div class="rating">
+        ★★★★★
+      </div>
+
+      <button class="add-to-cart-btn" >Add to Cart</button>
+    </div>
+  </div>
+</div>

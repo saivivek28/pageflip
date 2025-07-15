@@ -1,0 +1,14 @@
+<div class="login-wrapper">
+  <h1>Welcome Back to PageFlip</h1>
+  <p class="subtitle">Good to see you again!</p>
+
+  <div class="login-container">
+    <input type="text" placeholder="User Name" [(ngModel)]="username" />
+    <input type="password" placeholder="Enter your password" [(ngModel)]="password" />
+    <button (click)="login()">Login</button>
+    <p class="signup-text">
+      Don't have an account?
+      <span class="signup-link" (click)="signup()">Sign Up</span>
+    </p>
+  </div>
+</div>

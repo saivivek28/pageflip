@@ -1,0 +1,20 @@
+<nav class="navbar">
+  <div class="nav-left">
+    <h1 class="app-name" [routerLink]="['/home']">PageFlip</h1>
+  </div>
+
+  <div class="nav-middle">
+    <input
+      type="text"
+      placeholder="Search books..."
+      [(ngModel)]="searchQuery"
+      (input)="onSearchChange()"
+      class="search-input"
+    />
+  </div>
+
+  <div class="nav-right">
+    <button class="library-btn" [routerLink]="['/library']">My Library</button>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
+</nav>

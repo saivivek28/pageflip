@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root {
+  --primary-color: #ffffff;      /* White navbar */
+  --text-color: #333333;         /* Dark text for readability */
+  --accent-color: #3498db;       /* Blue to match 'Add to Cart' */
+  --shadow-light: rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  background: #f8f9fa;  /* light page background */
+  color: var(--text-color);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  background-color: #e6f0f8; /* soft bluish */
+
+
+  color: var(--text-color);
+  padding: 0.8rem 2rem; /* reduced height */
+  box-shadow: 0 2px 6px var(--shadow-light);
+  position: relative; /* Not fixed/sticky */
+}
+
+.nav-left .app-name {
+   margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #2c3e50, #3498db);
+  background-clip: text;              /* ✅ Standard version */
+  -webkit-background-clip: text;      /* ✅ For WebKit browsers */
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-left .app-name:hover {
+  color: var(--accent-color);
+}
+
+.nav-middle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.search-input {
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-size: 1rem;
+  color: var(--text-color);
+  box-shadow: 0 2px 6px var(--shadow-light);
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+}
+.library-btn {
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 30px;
+  background: #3498db;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 1rem;
+  transition: all 0.3s ease;
+}
+
+.library-btn:hover {
+  background: #2980b9;
+}
+
+
+.genre-select {
+  padding: 0.6rem 1rem;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-size: 1rem;
+  color: var(--text-color);
+  box-shadow: 0 2px 6px var(--shadow-light);
+  transition: all 0.3s ease;
+}
+
+.genre-select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+}
+
+.nav-right .logout-btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #3498db, #2980b9);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  box-shadow: 0 2px 6px var(--shadow-light);
+}
+
+.nav-right .logout-btn:hover {
+
+  background: linear-gradient(90deg, #2980b9, #3498db);
+}
+
+.nav-toggle {
+  display: none; /* for mobile toggle if needed */
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .nav-middle {
+    width: 100%;
+  }
+
+  .search-input, .genre-select {
+    width: 100%;
+  }
+
+  .nav-right {
+    width: 100%;
+    text-align: right;
+  }
+}

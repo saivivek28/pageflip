@@ -1,0 +1,19 @@
+<div class="signup-wrapper">
+  <h1>Hello, Welcome to PageFlip!</h1>
+  <p class="subtitle">Create Account</p>
+
+  <div class="signup-container">
+    <input type="text" placeholder="First Name" [(ngModel)]="firstName" />
+    <input type="text" placeholder="Last Name" [(ngModel)]="lastName" />
+    <input type="email" placeholder="Email Address" [(ngModel)]="email" />
+    <input type="text" placeholder="User Name" [(ngModel)]="username" />
+    <input type="password" placeholder="Password" [(ngModel)]="password" />
+
+    <button (click)="signup()">Sign Up</button>
+
+    <p class="login-text">
+      Already have an Account?
+      <span class="login-link" (click)="login()">Login</span>
+    </p>
+  </div>
+</div>

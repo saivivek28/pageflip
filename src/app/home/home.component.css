@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+.genre-toggle {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: #f4f4f6;
+  border-bottom: 1px solid #ddd;
+}
+
+.genre-toggle button {
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 20px;
+  background: #e0e0e0;
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.genre-toggle button:hover {
+  background: #d5d5d5;
+}
+
+.genre-toggle button.active {
+  background: #3498db;
+  color: #fff;
+}
+
+.book-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 2.5rem;
+  padding: 3rem;
+  background: linear-gradient(180deg, #f4f7fa 0%, #e8ecef 100%);
+}
+
+.book-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  cursor: pointer;
+}
+
+.book-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+}
+
+.ribbon {
+  position: absolute;
+  top: 20px;
+  left: -30px;
+  background: linear-gradient(90deg, #ff6b6b, #ff8e53);
+  color: #fff;
+  padding: 6px 30px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  transform: rotate(-45deg);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.book-cover {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.book-card:hover .book-cover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.book-info {
+  padding: 1.5rem;
+  text-align: center;
+  background: #fff;
+}
+
+.book-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0.5rem 0 0.3rem 0;
+  color: #2c3e50;
+  background: linear-gradient(to right, #2c3e50, #3498db);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.book-author {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin-bottom: 0.8rem;
+  font-weight: 400;
+}
+
+.price-row {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.8rem;
+  margin: 0.8rem 0;
+}
+
+.price-old {
+  text-decoration: line-through;
+  color: #95a5a6;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.price-new {
+  font-weight: 700;
+  color: #e74c3c;
+  font-size: 1.1rem;
+}
+
+.rating {
+  font-size: 1rem;
+  color: #f1c40f;
+  margin: 0.8rem 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-to-cart-btn {
+  background: linear-gradient(90deg, #3498db, #2980b9);
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.add-to-cart-btn:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(90deg, #2980b9, #3498db);
+}
+
+.add-to-cart-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+
+.add-to-cart-btn:hover::after {
+  width: 200px;
+  height: 200px;
+}
+
+@media (max-width: 768px) {
+  .book-list {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.8rem;
+    padding: 2rem;
+  }
+
+  .book-cover {
+    height: 220px;
+  }
+
+  .book-title {
+    font-size: 1.1rem;
+  }
+
+  .add-to-cart-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .book-list {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .book-cover {
+    height: 200px;
+  }
+
+  .book-title {
+    font-size: 1rem;
+  }
+
+  .book-author {
+    font-size: 0.8rem;
+  }
+
+  .price-new {
+    font-size: 1rem;
+  }
+
+  .price-old {
+    font-size: 0.8rem;
+  }
+}

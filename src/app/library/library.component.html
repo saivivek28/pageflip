@@ -1,0 +1,14 @@
+<h2>My Library</h2>
+
+<div *ngIf="libraryBooks.length === 0">
+  <p>You haven’t purchased or rented any books yet.</p>
+</div>
+
+<div class="book-list">
+  <div class="book-card" *ngFor="let book of libraryBooks">
+    <img [src]="book.coverImage" alt="{{ book.title }}" class="book-cover" />
+    <h3>{{ book.title }}</h3>
+    <p>by {{ book.author }}</p>
+    <p><strong>Genre:</strong> {{ book.genre }}</p>
+  </div>
+</div>

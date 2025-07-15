@@ -1,0 +1,209 @@
+{
+  "books": [
+    {
+      "bookId": "ebook001",
+      "title": "One Day In December",
+      "author": "Joise Silver",
+      "genre": "Romantic",
+      "coverImage": "https://i.pinimg.com/736x/fd/c7/61/fdc761c4790a9749ff23941844cfef9a.jpg",
+      "priceBuy": 299,
+      "priceRent": 49,
+      "type": "ebook",
+      "fileUrl": "assets/ebooks/into_the_wild.pdf",
+      "format": "PDF",
+      "description": "\"One Day in December\" by Josie Silver is a novel that follows Laurie, who experiences love at first sight with a man she sees through a bus window on a snowy December day. Over the next year, she searches for him, only to discover he's her best friend Sarah's new boyfriend, Jack. The story then spans a decade, exploring their complex relationships, missed opportunities, and the enduring nature of friendship."
+    },
+    {
+      "bookId": "ebook002",
+      "title": "Lovers By The Sea",
+      "author": "Jane Austen",
+      "genre": "Romantic",
+      "coverImage": "https://i.pinimg.com/736x/27/a6/91/27a691aeef342fd5100bd16de3829e72.jpg",
+      "priceBuy": 199,
+      "priceRent": 39,
+      "type": "ebook",
+      "fileUrl": "assets/ebooks/pride_and_prejudice.epub",
+      "format": "EPUB",
+            "description": "\"Lovers by the Sea\" likely refers to the short story \"Lovers of the Sea\" by WordPress.com, where a young woman, forbidden from the sea, finds solace in playing the piano while watching the waves. One day, she encounters a mysterious young man on the rocks and their connection is established through a shared love of the sea. "
+
+    },
+    {
+      "bookId": "ebook003",
+      "title": "I Am Not Jessica",
+      "author": "Ann Liang",
+      "genre": "Fantasy",
+      "coverImage": "https://i.pinimg.com/736x/f3/4a/0f/f34a0fef359161ec005f4cd9377155a2.jpg",
+      "priceBuy": 399,
+      "priceRent": 65,
+      "type": "ebook",
+      "fileUrl": "assets/ebooks/dune.pdf",
+      "format": "PDF",
+      "description": "\"I Am Not Jessica Chen\" by Ann Liang tells the story of Jenna Chen, a girl constantly living in the shadow of her academically gifted and popular cousin, Jessica. After failing to meet her parents' expectations, Jenna makes a wish to be Jessica, which is granted, and she wakes up in Jessica's body. Jenna soon discovers that Jessica's life, despite its outward perfection, is riddled with pressure and a lack of genuine connection, while simultaneously, everyone around her forgets who Jenna is. The novel explores themes of self-discovery, the pressures of academic achievement, and the importance of self-acceptance."
+
+    },
+    {
+      "bookId": "phy001",
+      "title": "Dark Matter",
+      "author": "Blake Crouch",
+      "genre": "Drama",
+      "coverImage": "https://i.pinimg.com/736x/53/cf/37/53cf37e8ea0582a6cd31dd2e68064517.jpg",
+      "priceBuy": 349,
+      "priceRent": 60,
+
+      "type": "physical",
+      "stock": 5,
+      "format": "Paperback",
+            "description": "\"Dark Matter,\" by Blake Crouch, is a science fiction thriller about Jason Dessen, a physics professor kidnapped and thrust into a parallel universe where his life took a drastically different turn. In this alternate reality, he's a celebrated quantum physicist, but estranged from his family, a stark contrast to his life as a devoted family man with a wife and son. Driven by the desire to return to his original reality, Jason embarks on a mind-bending journey through the multiverse, confronting versions of himself and questioning the nature of choice, identity, and reality itself. "
+
+    },
+    {
+      "bookId": "phy002",
+      "title": "DARK",
+      "author": "J.K. Rowling",
+      "genre": "Action",
+      "coverImage": "https://i.pinimg.com/736x/56/4f/2f/564f2f26202c31d4bb65c36ec12bddd0.jpg",
+      "priceBuy": 299,
+      "priceRent": 55,
+      "type": "physical",
+      "stock": 8,
+      "format": "Hardcover",
+            "description": "A murderous, undead girl haunts the remote stretch of woods where she was killed decades earlier. One night, she discovers a blind boy hiding in the trunk of one of her victim's cars. Her decision to let the boy live throws her solitary existence into upheaval, and ultimately forces her to re-examine just how much of her humanity her murderer was able to destroy."
+    },
+    {
+      "bookId": "phy003",
+      "title": "1899",
+      "author": "Yuval Noah Harari",
+      "genre": "Sci-Fi",
+      "coverImage": "https://i.pinimg.com/736x/4b/90/b6/4b90b67d6cbb1a9ab1b9098cfae85d5e.jpg",
+      "priceBuy": 449,
+      "priceRent": 70,
+      "type": "physical",
+      "stock": 4,
+      "format": "Paperback",
+            "description": "\"1899\" is a mystery-horror series set in 1899, following a group of European immigrants traveling to America on the steamship Kerberos. Their journey takes a dark turn when they encounter the derelict ship Prometheus, lost for months, and find it deserted. The discovery unravels a complex web of secrets connecting the passengers' pasts, turning their voyage into a nightmarish riddle. The series creators, known for \"Dark\", explore themes of identity, language, and the human condition against a backdrop of supernatural occurrences. "
+    },
+    {
+      "bookId": "ebook004",
+      "title": "The Tank",
+      "author": "G.R. Taylor",
+      "genre": "Horror",
+      "coverImage": "https://i.pinimg.com/736x/b0/06/b8/b006b84c80893179d6843bf8ce53ecb8.jpg",
+      "priceBuy": 259,
+      "priceRent": 45,
+      "type": "ebook",
+      "fileUrl": "assets/ebooks/the_shining.pdf",
+      "format": "PDF",
+            "description":"\"The Tank,\" a novel by G.R. Taylor, tells the story of Benjamin Kane, a man with a violent past who is imprisoned for his vigilantism. Inside Two Rocks Supermax, he finds himself surrounded by the very criminals he used to hunt, but his mission is far from over; he sees his imprisonment as an opportunity to further punish predators. "
+    },
+    {
+      "bookId": "phy004",
+      "title": "A Lab Rat's Guide To Fated Love",
+      "author": "Nori Arya",
+      "genre": "Drama",
+      "coverImage": "https://i.pinimg.com/736x/61/eb/48/61eb485c415ea756ce95ed7df421c62c.jpg",
+      "priceBuy": 399,
+      "priceRent": 65,
+      "type": "physical",
+      "stock": 6,
+      "format": "Paperback",
+            "description": "\"A Lab Rat's Guide to Fated Love\" follows Vir, a man inexplicably drawn to Dr. Nori Arya, a nano-biotechnology scientist, due to her uncanny resemblance to a woman in his dreams. As their paths intertwine in a scientific program, Vir's sanity is questioned, especially when he senses a darkness within Nori. Nori, in turn, finds her carefully constructed facade crumbling as she navigates her first human subject and the sabotage attempts from rivals. Their connection deepens, leading to a romantic entanglement in a secluded cottage, where they must confront the consequences of their growing feelings and the potential cost of holding onto each other. "
+
+    },
+    {
+      "bookId": "ebook005",
+      "title": "100 Days of Sun Light",
+      "author": "Abbie Emmons",
+      "genre": "Philosophy",
+      "coverImage": "https://i.pinimg.com/736x/95/02/eb/9502eba759e4fa799ad889686f074a33.jpg",
+      "priceBuy": 179,
+      "priceRent": 30,
+      "type": "ebook",
+      "fileUrl": "assets/ebooks/the_art_of_war.pdf",
+      "format": "PDF",
+            "description": "\"100 Days of Sunlight\" by Abbie Emmons tells the story of Tessa Dickinson, a 16-year-old poetry blogger, who loses her sight after a car accident. Devastated and scared, she withdraws from the world. Her grandparents hire a typist to help her continue writing, and Weston Ludovico, a boy who has lost his legs, applies. Tessa initially rejects Weston's optimistic outlook, but as they grow closer, he helps her find a new perspective on life despite her blindness. The story explores themes of disability, self-acceptance, and the power of human connection. "
+
+    },
+    {
+      "bookId": "phy005",
+      "title": "Happy Place",
+      "author": "Emily Henry",
+      "genre": "Fantasy",
+      "coverImage": "https://i.pinimg.com/736x/26/0d/bf/260dbf84d79a00f07802db218bd8dfbe.jpg",
+      "priceBuy": 329,
+      "priceRent": 58,
+      "type": "physical",
+      "stock": 7,
+      "format": "Hardcover",
+            "description": "\"Happy Place\" by Emily Henry follows Harriet and Wyn, a couple who have secretly broken up but continue to pretend they're still together during their annual friend getaway to their beloved Maine cottage. Their friends are unaware of the split, and one couple is even planning a wedding at the cottage, making it crucial for Harriet and Wyn to maintain the charade for one last week. The novel explores their past relationship, their present struggles, and their complicated feelings as they navigate this final trip together, confronting their unresolved issues and rediscovering what truly makes them happy. "
+
+    },
+    {
+      "bookId": "ebook006",
+      "title": "Once upon a Curfew",
+      "author": "Srishti Chaudhary",
+      "genre": "Thriller",
+      "coverImage": "https://indianbookstore.co.in/wp-content/uploads/2025/01/Beige-Green-Modern-Modern-Food-Instagram-Post-10.png",
+      "priceBuy": 289,
+      "priceRent": 50,
+      "type": "ebook",
+      "fileUrl": "assets/ebooks/behind_closed_doors.pdf",
+      "format": "PDF",
+            "description": "\"Once Upon a Curfew\" by Srishti Chaudhary is a historical fiction novel set in 1970s Delhi, during India's Emergency period. The story revolves around Indira (Indu), a young woman who inherits a flat and dreams of turning it into a library for women. As she works towards her goal, she finds herself drawn to a young lawyer, Rana, while her fiancé, Rajat, is away in London. The declaration of the Emergency throws their lives into disarray, forcing Indu to confront her choices and decide what kind of life she truly wants. "
+
+    },
+    {
+      "bookId": "phy006",
+      "title": "The Lost Book Shop",
+      "author": "Evie Woods",
+      "genre": "Comedy",
+      "coverImage": "https://i.pinimg.com/736x/8d/c1/64/8dc1647045f4f19d084147272c0b0f8d.jpg",
+      "priceBuy": 259,
+      "priceRent": 42,
+      "type": "physical",
+      "stock": 9,
+      "format": "Paperback",
+            "description": "The Lost Bookshop, by Evie Woods, tells the story of three individuals whose lives become intertwined through a mysterious, vanishing bookshop in Dublin. Opaline, a woman escaping an arranged marriage in the 1920s, finds herself in Paris working at Shakespeare and Company, learning about rare books and encountering literary figures. In the present day, Martha, fleeing an abusive marriage, becomes a housekeeper, and Henry, a scholar, searches for a lost Emily Brontë manuscript and a mysterious bookshop. Their paths converge when Henry discovers a letter hinting at the bookshop's existence and enlists Martha's help in his search, leading them to Madame Bowden's house, which seems to be the location of the lost bookshop. The story explores themes of escape, resilience, and the power of literature, with a touch of magical realism as the characters navigate their own extraordinary stories within the bookshop's walls. "
+
+    },
+    {
+      "bookId": "ebook007",
+      "title": "The Girl Who Drank the Moon",
+      "author": "witch Xan",
+      "genre": "Action",
+      "coverImage": "https://i.pinimg.com/736x/57/85/8b/57858bd4d9f3f006ab1bfb81c6b145e6.jpg",
+      "priceBuy": 310,
+      "priceRent": 55,
+      "type": "ebook",
+      "fileUrl": "assets/ebooks/action_hero.pdf",
+      "format": "PDF",
+            "description": "\"The Girl Who Drank the Moon\" tells the story of Luna, a child accidentally \"enmagicked\" with moonlight by the witch Xan, who raises her alongside a swamp monster and a tiny dragon. Meanwhile, in the Protectorate, a young man named Antain begins to question the tradition of sacrificing infants to the witch, leading him on a journey to uncover the truth about the witch and the town's practices. The novel explores themes of love, sacrifice, courage, and the nature of good and evil as Luna's magic emerges and threatens to disrupt the fragile peace. "
+    },
+    {
+      "bookId": "phy007",
+      "title": "We Dream of Space",
+      "author": "Erin Entrada",
+      "genre": "Thriller",
+      "coverImage": "https://i.pinimg.com/736x/50/e8/6f/50e86faafa0e40621c0aacfef31eebea.jpg",
+      "priceBuy": 310,
+      "priceRent": 55,
+      "type": "physical",
+      "stock": 5,
+      "format": "Paperback",
+            "description": "\"We Dream of Space\" by Erin Entrada Kelly follows three siblings, Cash, Fitch, and Bird Nelson Thomas, in the weeks leading up to the 1986 Challenger space shuttle launch. Each sibling grapples with personal challenges and anxieties, while also navigating the tense and often chaotic atmosphere of their home life. The book explores themes of family dysfunction, the impact of tragedy, and the power of connection and hope, especially within the context of the Challenger disaster. "
+
+    },
+    {
+      "bookId": "ebook008",
+      "title": "The Voice in my Head",
+      "author": "Dana L.Davis",
+      "genre": "Comedy",
+      "coverImage": "https://i.pinimg.com/736x/9f/33/58/9f33584e51c79bba836cdf46ef9c2056.jpg",
+      "priceBuy": 270,
+      "priceRent": 44,
+      "type": "ebook",
+      "fileUrl": "assets/ebooks/lol.pdf",
+      "format": "PDF",
+            "description": "\"The Voice in My Head\" by Dana L. Davis tells the story of identical twins Indigo and Violet, where Violet is terminally ill and planning a medically assisted death. Indigo, struggling with this, attempts suicide and then hears a voice she believes to be God. This voice urges them to embark on a road trip to Arizona's Wave rock formation, promising Violet's healing if they reach it. The family, including their controlling older sister, distant parents, and other relatives, reluctantly join the journey in a paratransit bus. The trip becomes a chaotic and emotional experience as they confront their individual and family dysfunctions, forcing Indigo to step up and lead, while also dealing with her own insecurities and the voice in her head. "
+    }
+  ]
+}
