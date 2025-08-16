@@ -1,1 +1,89 @@
 /* You can add global styles to this file, and also import other style files */
+/* Success toast */
+.toast-success {
+  background-color: #28a745 !important; /* Green */
+  color: white !important;
+  font-weight: 500;
+}
+
+/* Error toast */
+.toast-error {
+  background-color: #dc3545 !important; /* Red */
+  color: white !important;
+  font-weight: 500;
+}
+
+/* Info toast */
+.toast-info {
+  background-color: #17a2b8 !important; /* Blue */
+  color: white !important;
+  font-weight: 500;
+}
+
+/* Warning toast */
+.toast-warning {
+  background-color: #ffc107 !important; /* Yellow */
+  color: #212529 !important;
+  font-weight: 500;
+}
+
+/* Rounded corners & shadow */
+.toast {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+}
+/* Default Light Mode */
+/* 🌙 Dark Mode Overrides */
+.dark-mode {
+  background-color: #121212 !important;
+  color: #e4e4e4 !important;
+}
+
+/* Navbar */
+.dark-mode .navbar {
+  background-color: #1f1f1f !important;
+  border-bottom: 1px solid #333 !important;
+}
+.dark-mode .navbar .search-bar {
+  background-color: #2a2a2a !important;
+  color: #fff !important;
+}
+
+/* Category buttons */
+.dark-mode .category-chip {
+  background-color: #2a2a2a !important;
+  color: #fff !important;
+  border-color: #444 !important;
+}
+.dark-mode .category-chip.active {
+  background-color: #007bff !important;
+  color: #fff !important;
+}
+
+/* Book cards */
+.dark-mode .book-card {
+  background-color: #1f1f1f !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6) !important;
+}
+.dark-mode .book-card .btn-primary {
+  background-color: #3399ff !important;
+  border-color: #3399ff !important;
+}
+.dark-mode .book-card .btn-primary:hover {
+  background-color: #1a8cff !important;
+}
+
+/* Page background */
+.dark-mode body {
+  background-color: #121212 !important;
+}
+
+/* Text colors */
+.dark-mode h1, 
+.dark-mode h2, 
+.dark-mode h3, 
+.dark-mode p, 
+.dark-mode span {
+  color: #e4e4e4 !important;
+}

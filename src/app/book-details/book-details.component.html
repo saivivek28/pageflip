@@ -15,14 +15,14 @@
       <p>
         <strong>Stock:</strong> {{ book.stock }} | <strong>Format:</strong> {{ book.format }}
       </p>
-      <button class="action-button buy-button" (click) = "addToLibrary(book)">Buy Now</button>
+      <button class="action-button buy-button" (click) = "addToLibrary(book)">Add to Library</button>
     </div>
     <div *ngIf="book.type === 'ebook'" class="action-section">
       <p>
         <strong>Format:</strong> {{ book.format }} |
-        <a [href]="book.fileUrl" download class="download-link">Download</a>
+        <!-- <a [href]="book.fileUrl" download class="download-link">Download</a> -->
       </p>
-      <button class="action-button rent-button" (click) = "addToLibrary(book)">Rent Now</button>
+      <button class="action-button rent-button" (click) = "addToLibrary(book)">Add to Library</button>
     </div>
     <h2>About this Book</h2>
   <p>{{book.description}}</p>

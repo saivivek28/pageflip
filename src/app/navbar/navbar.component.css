@@ -20,8 +20,6 @@ body {
   align-items: center;
   
   background-color: #e6f0f8; /* soft bluish */
-
-
   color: var(--text-color);
   padding: 0.8rem 2rem; /* reduced height */
   box-shadow: 0 2px 6px var(--shadow-light);
@@ -36,6 +34,7 @@ body {
   background-clip: text;              /* ✅ Standard version */
   -webkit-background-clip: text;      /* ✅ For WebKit browsers */
   -webkit-text-fill-color: transparent;
+  cursor: pointer;
 }
 
 .nav-left .app-name:hover {
@@ -46,6 +45,9 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex: 1;
+  justify-content: center;
+  margin: 0 2rem;
 }
 
 .search-input {
@@ -57,6 +59,7 @@ body {
   color: var(--text-color);
   box-shadow: 0 2px 6px var(--shadow-light);
   transition: all 0.3s ease;
+  min-width: 300px;
 }
 
 .search-input:focus {
@@ -64,57 +67,76 @@ body {
   border-color: var(--accent-color);
   box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
 }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .library-btn {
   padding: 0.7rem 1.5rem;
   border: none;
-  border-radius: 30px;
+  border-radius: 19px;
   background: #3498db;
   color: #fff;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  margin-right: 1rem;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .library-btn:hover {
   background: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
 }
 
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
 
-.genre-select {
-  padding: 0.6rem 1rem;
-  border-radius: 20px;
-  border: 1px solid #ccc;
-  background: #fff;
-  font-size: 1rem;
-  color: var(--text-color);
-  box-shadow: 0 2px 6px var(--shadow-light);
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
   transition: all 0.3s ease;
+  border: 2px solid transparent;
 }
 
-.genre-select:focus {
-  outline: none;
+.profile-icon:hover {
+  transform: scale(1.1);
   border-color: var(--accent-color);
-  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
 }
 
-.nav-right .logout-btn {
-  padding: 0.6rem 1.2rem;
+.logout-btn {
+  padding: 0.7rem 1.5rem;
   border: none;
-  border-radius: 20px;
-  background: linear-gradient(90deg, #3498db, #2980b9);
+  border-radius: 19px;
+  background: linear-gradient(90deg, #e74c3c, #c0392b);
   color: #fff;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease;
-  box-shadow: 0 2px 6px var(--shadow-light);
+  transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
-.nav-right .logout-btn:hover {
-
-  background: linear-gradient(90deg, #2980b9, #3498db);
+.logout-btn:hover {
+  background: linear-gradient(90deg, #c0392b, #e74c3c);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
 }
+
+
+
+
+
 
 .nav-toggle {
   display: none; /* for mobile toggle if needed */
@@ -126,18 +148,34 @@ body {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+    padding: 1rem;
   }
 
   .nav-middle {
     width: 100%;
+    margin: 0;
   }
 
-  .search-input, .genre-select {
+  .search-input {
     width: 100%;
+    min-width: auto;
   }
 
   .nav-right {
     width: 100%;
-    text-align: right;
+    justify-content: space-between;
+  }
+
+  .profile-section {
+    gap: 0.5rem;
+  }
+
+  .library-btn,
+  .logout-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
   }
 }
+
+
+

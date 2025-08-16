@@ -43,7 +43,25 @@
         ★★★★★
       </div>
 
-      <button class="add-to-cart-btn" >Add to Cart</button>
+      <button class="add-to-cart-btn" >Know More..</button>
     </div>
+  </div>
+</div>
+<!-- ✅ Chatbot Floating Button -->
+<div class="chatbot-container" [class.open]="chatOpen">
+  <div class="chat-header" (click)="toggleChat()">
+    📚 PageFlip Assistant
+  </div>
+
+  <div class="chat-body" *ngIf="chatOpen">
+    <div class="messages">
+      <div class="bot-msg" *ngFor="let msg of chatMessages">{{ msg }}</div>
+    </div>
+
+    <input
+      [(ngModel)]="userInput"
+      placeholder="Type here..."
+      (keyup.enter)="handleUserInput()"
+    />
   </div>
 </div>

@@ -49,6 +49,8 @@
 }
 
 .back-button {
+   position: fixed;
+  top: 0;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;

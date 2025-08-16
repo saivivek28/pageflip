@@ -3,9 +3,10 @@
   <p class="subtitle">Good to see you again!</p>
 
   <div class="login-container">
-    <input type="text" placeholder="User Name" [(ngModel)]="username" />
+    <!-- <input type="text" placeholder="User Name" [(ngModel)]="username" />| -->
+    <input type="email" placeholder="Enter email" [(ngModel)]="email"/>
     <input type="password" placeholder="Enter your password" [(ngModel)]="password" />
-    <button (click)="login()">Login</button>
+    <button (click)="signIn()">Login</button>
     <p class="signup-text">
       Don't have an account?
       <span class="signup-link" (click)="signup()">Sign Up</span>

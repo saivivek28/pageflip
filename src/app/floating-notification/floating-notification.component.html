@@ -1,0 +1,16 @@
+<div class="notification-container">
+  <div 
+    class="notification-card" 
+    *ngFor="let n of notifications"
+    [ngClass]="n.type"
+  >
+<img src="https://media.istockphoto.com/id/2167740181/photo/a-librarys-quiet-embrace-rows-of-books-lining-wooden-shelves.webp?a=1&b=1&s=612x612&w=0&k=20&c=bSDjcyTTib6G1HP01Jz1e924diJD8qMW6aYirG4dYMA=" 
+     alt="Cover" class="cover-img">
+    <div class="text">
+      <strong>{{ n.book.title }}</strong>
+      <span *ngIf="n.type === 'added'">Added to your library</span>
+      <span *ngIf="n.type === 'exists'">Already in your library</span>
+      <span *ngIf="n.type === 'removed'">Removed from your library</span>
+    </div>
+  </div>
+</div>

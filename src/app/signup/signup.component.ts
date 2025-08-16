@@ -1,41 +1,71 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-signup',
-  imports: [RouterModule,FormsModule,CommonModule],
+  standalone: true,
+  imports: [RouterModule, FormsModule, CommonModule, HttpClientModule],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent {
-  firstName: string = '';
-  lastName: string = '';
+  signupURL = 'http://localhost:5000/register';
+
   email: string = '';
   username: string = '';
   password: string = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private toastr: ToastrService
+  ) {}
 
   signup() {
-    if (this.firstName && this.lastName && this.email && this.username && this.password) {
-      console.log('Sign Up Details:', {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        email: this.email,
-        username: this.username,
-        password: this.password
-      });
-      alert(`Welcome, ${this.firstName}! Your account has been created.`);
-      this.router.navigate(['/home']); 
-    } else {
-      alert('Please fill in all fields.');
+    const reqBody = {
+      name: this.username.trim(),
+      email: this.email.trim(),
+      password: this.password.trim()
+    };
+
+    if (!reqBody.name || !reqBody.email || !reqBody.password) {
+      this.toastr.error('All fields are required');
+      return;
     }
+
+    this.http.post(this.signupURL, reqBody).subscribe({
+      next: (res: any) => {
+        if (res.token) {
+          localStorage.setItem('JWT_token', res.token);
+        }
+        this.toastr.success(res.message || 'User registered successfully');
+        this.router.navigate(['/home']);
+      },
+      error: (err) => {
+        let errorMsg = 'Registration failed';
+
+        if (err.status === 400 && err.error && typeof err.error === 'object') {
+          errorMsg = Object.entries(err.error)
+            .map(([field, messages]) => `${field}: ${(messages as string[]).join(', ')}`)
+            .join(' | ');
+        } else if (err.status === 409 && err.error?.error) {
+          errorMsg = err.error.error;
+        } else if (typeof err.error === 'string') {
+          errorMsg = err.error;
+        } else if (err.error?.error) {
+          errorMsg = err.error.error;
+        }
+
+        this.toastr.error(errorMsg);
+      }
+    });
   }
 
   login() {
-    console.log('Redirecting to login page...');
-    this.router.navigate(['/login']); 
+    this.router.navigate(['/login']);
   }
 }

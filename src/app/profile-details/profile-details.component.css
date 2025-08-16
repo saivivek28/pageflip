@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+.back-button {
+   position: fixed;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 2rem;
+  padding: 0.5rem 1.5rem;
+  background: linear-gradient(90deg, #ff6b6b, #ff8e53);
+  border: none;
+  border-radius: 25px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.back-button:hover {
+  background: linear-gradient(90deg, #ff8e53, #ff6b6b);
+  transform: translateX(-3px);
+}
+
+
+.profile-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  font-family: 'Poppins', sans-serif;
+}
+
+.profile-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2.5rem;
+  width: 360px;
+  max-width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+}
+
+.profile-header {
+  margin-bottom: 2rem;
+}
+
+.profile-pic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid #3498db;
+  margin-bottom: 1rem;
+  transition: transform 0.4s ease, filter 0.4s ease, box-shadow 0.4s ease;
+  object-fit: cover;
+}
+
+.profile-pic:hover {
+  transform: scale(1.1) rotate(4deg);
+  filter: brightness(1.1);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c3e50;
+  background: linear-gradient(to right, #2c3e50, #3498db);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.email {
+  font-size: 0.95rem;
+  color: #7f8c8d;
+  font-weight: 400;
+  margin-top: 0.5rem;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.edit-btn,
+.logout-btn {
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.edit-btn {
+  background: linear-gradient(90deg, #3498db, #2980b9);
+  color: #fff;
+}
+
+.edit-btn:hover {
+  background: linear-gradient(90deg, #2980b9, #3498db);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+.edit-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+
+.edit-btn:hover::after {
+  width: 200px;
+  height: 200px;
+}
+
+.logout-btn {
+  background: linear-gradient(90deg, #e74c3c, #c0392b);
+  color: #fff;
+}
+
+.logout-btn:hover {
+  background: linear-gradient(90deg, #c0392b, #e74c3c);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+
+.logout-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+
+.logout-btn:hover::after {
+  width: 200px;
+  height: 200px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #3498db;
+  font-weight: 500;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+@media (max-width: 768px) {
+  .profile-card {
+    width: 320px;
+    padding: 2rem;
+  }
+
+  .profile-pic {
+    width: 100px;
+    height: 100px;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  .email {
+    font-size: 0.9rem;
+  }
+
+  .edit-btn,
+  .logout-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-page {
+    padding: 1.5rem;
+  }
+
+  .profile-card {
+    width: 280px;
+    padding: 1.5rem;
+  }
+
+  .profile-pic {
+    width: 90px;
+    height: 90px;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  .email {
+    font-size: 0.85rem;
+  }
+
+  .edit-btn,
+  .logout-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+}

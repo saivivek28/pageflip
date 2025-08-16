@@ -15,6 +15,15 @@
 
   <div class="nav-right">
     <button class="library-btn" [routerLink]="['/library']">My Library</button>
-    <button class="logout-btn" (click)="logout()">Logout</button>
+    
+    <div class="profile-section">
+      <img 
+        src="https://cdn-icons-png.flaticon.com/128/9131/9131529.png" 
+        [routerLink]="['/profile']" 
+        alt="Profile" 
+        class="profile-icon" 
+      />
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
   </div>
 </nav>

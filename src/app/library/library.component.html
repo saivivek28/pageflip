@@ -5,10 +5,11 @@
 </div>
 
 <div class="book-list">
-  <div class="book-card" *ngFor="let book of libraryBooks">
+  <div class="book-card" *ngFor="let book of libraryBooks; let i = index">
     <img [src]="book.coverImage" alt="{{ book.title }}" class="book-cover" />
     <h3>{{ book.title }}</h3>
     <p>by {{ book.author }}</p>
     <p><strong>Genre:</strong> {{ book.genre }}</p>
+    <button (click)="removeBook(i)">Remove</button>
   </div>
 </div>

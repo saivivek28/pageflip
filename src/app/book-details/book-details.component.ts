@@ -1,47 +1,10 @@
-// // book-details.component.ts ✅ FIXED
-// import { Component, OnInit } from '@angular/core';
-// import { ActivatedRoute, RouterLink } from '@angular/router';
-// import { HttpClient } from '@angular/common/http';
-// import { CommonModule } from '@angular/common';
-
-// @Component({
-//   selector: 'app-book-details',
-//   standalone: true,
-//   imports: [CommonModule, RouterLink],
-//   templateUrl: './book-details.component.html',
-//   styleUrls: ['./book-details.component.css']
-// })
-// export class BookDetailsComponent implements OnInit {
-//   bookId: string | null = null;
-//   book: any = null;
-//   apiUrl:string = 'http://localhost:3000/books';
-
-//   constructor(private route: ActivatedRoute, private http: HttpClient) {}
-//   ngOnInit(): void {
-//     this.bookId = this.route.snapshot.paramMap.get('id');
-//     this.http.get<any>(this.apiUrl).subscribe(data => {
-//       this.book = data.find((b: any) => b.bookId == this.bookId);
-//     });
-//   }
-//   addToLibrary(book: any) {
-//   const stored = localStorage.getItem('libraryBooks');
-//   let books = stored ? JSON.parse(stored) : [];
-
-//   // Prevent duplicates
-//   const exists = books.some((b: any) => b.bookId === book.bookId);
-//   if (!exists) {
-//     books.push(book);
-//     localStorage.setItem('libraryBooks', JSON.stringify(books));
-//   }
-// }
-
-// }
-
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
+import { NotificationService } from '../notification.service';
 
 @Component({
   selector: 'app-book-details',
@@ -55,7 +18,12 @@ export class BookDetailsComponent {
   reviews: any[] = [];
   recommendedBooks: any[] = [];
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private toastr: ToastrService,
+    private notificationService: NotificationService
+  ) {
     this.loadBook();
   }
 
@@ -69,7 +37,6 @@ export class BookDetailsComponent {
   }
 
   loadReviews() {
-    // Dummy reviews — replace with backend later
     this.reviews = [
       { user: 'Sai Vivek', comment: 'Loved this book. Highly recommend!' },
       { user: 'Aarav Reddy', comment: 'Interesting story and great writing.' },
@@ -85,20 +52,27 @@ export class BookDetailsComponent {
     );
   }
 
-addToLibrary(book: any) {
-  const stored = localStorage.getItem('libraryBooks');
+  addToLibrary(book: any) {
+  const userId = localStorage.getItem('id');
+  if (!userId) {
+    this.notificationService.showNotification(
+      { title: 'Please login', cover: 'assets/error.png' },
+      'exists'
+    );
+    return;
+  }
+
+  const key = `libraryBooks_${userId}`;
+  const stored = localStorage.getItem(key);
   let books = stored ? JSON.parse(stored) : [];
 
-  // ✅ Prevent adding duplicate books
   const exists = books.some((b: any) => b.bookId === book.bookId);
   if (!exists) {
     books.push(book);
-    localStorage.setItem('libraryBooks', JSON.stringify(books));
-    alert(`✅ "${book.title}" added to your library!`);
+    localStorage.setItem(key, JSON.stringify(books));
+    this.notificationService.showNotification(book, 'added');
   } else {
-    alert(`ℹ️ "${book.title}" is already in your library.`);
+    this.notificationService.showNotification(book, 'exists');
   }
 }
-
 }
-
