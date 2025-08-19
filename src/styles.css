@@ -87,3 +87,62 @@
 .dark-mode span {
   color: #e4e4e4 !important;
 }
+
+/* Global Responsive Utilities */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Responsive text scaling */
+html {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* Responsive spacing utilities */
+.responsive-padding {
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .responsive-padding {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-padding {
+    padding: 1rem;
+  }
+}
+
+.responsive-margin {
+  margin: 2rem;
+}
+
+@media (max-width: 768px) {
+  .responsive-margin {
+    margin: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-margin {
+    margin: 1rem;
+  }
+}

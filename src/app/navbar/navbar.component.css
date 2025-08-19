@@ -151,29 +151,95 @@ body {
     padding: 1rem;
   }
 
+  .nav-left .app-name {
+    font-size: 1.8rem;
+    text-align: center;
+    width: 100%;
+  }
+
   .nav-middle {
     width: 100%;
     margin: 0;
+    justify-content: stretch;
   }
 
   .search-input {
     width: 100%;
     min-width: auto;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
 
   .nav-right {
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.8rem;
   }
 
   .profile-section {
     gap: 0.5rem;
+    order: 2;
+  }
+
+  .library-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    order: 1;
+  }
+
+  .logout-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .profile-icon {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.8rem;
+    gap: 0.8rem;
+  }
+
+  .nav-left .app-name {
+    font-size: 1.6rem;
+  }
+
+  .search-input {
+    padding: 0.45rem 0.8rem;
+    font-size: 0.85rem;
+    border-radius: 15px;
+  }
+
+  .nav-right {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+
+  .profile-section {
+    justify-content: center;
+    order: 1;
   }
 
   .library-btn,
   .logout-btn {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 15px;
+  }
+
+  .library-btn {
+    order: 2;
+  }
+
+  .profile-icon {
+    width: 32px;
+    height: 32px;
   }
 }
 

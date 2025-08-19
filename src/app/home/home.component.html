@@ -47,21 +47,71 @@
     </div>
   </div>
 </div>
-<!-- ✅ Chatbot Floating Button -->
+<!-- ✅ Enhanced Chatbot -->
 <div class="chatbot-container" [class.open]="chatOpen">
   <div class="chat-header" (click)="toggleChat()">
-    📚 PageFlip Assistant
+    <span class="chat-title">📚 PageFlip Assistant</span>
+    <div class="chat-controls" *ngIf="chatOpen" (click)="$event.stopPropagation()">
+      <button class="clear-btn" (click)="clearChat($event)" title="Clear chat">🗑️</button>
+      <button class="minimize-btn" (click)="minimizeChat($event)" title="Minimize">➖</button>
+    </div>
   </div>
 
   <div class="chat-body" *ngIf="chatOpen">
-    <div class="messages">
-      <div class="bot-msg" *ngFor="let msg of chatMessages">{{ msg }}</div>
+    <div class="messages" #messagesContainer>
+      <div class="message" *ngFor="let msg of chatMessages" 
+           [class.user-message]="msg.isUser" 
+           [class.bot-message]="!msg.isUser">
+        
+        <div class="message-content">
+          <div class="message-text">{{ msg.text }}</div>
+          <div class="message-time">{{ msg.timestamp | date:'short' }}</div>
+          
+          <!-- Quick suggestions -->
+          <div class="suggestions" *ngIf="!msg.isUser && msg.suggestions && msg.suggestions.length > 0">
+            <button class="suggestion-btn" 
+                    *ngFor="let suggestion of msg.suggestions" 
+                    (click)="onSuggestionClick(suggestion)">
+              {{ suggestion }}
+            </button>
+          </div>
+
+          <!-- Book recommendations -->
+          <div class="book-recommendations" *ngIf="msg.bookRecommendations && msg.bookRecommendations.length > 0">
+            <div class="book-rec" *ngFor="let book of msg.bookRecommendations">
+              <img [src]="book.coverImage" [alt]="book.title" class="book-rec-cover">
+              <div class="book-rec-info">
+                <div class="book-rec-title">{{ book.title }}</div>
+                <div class="book-rec-author">{{ book.author }}</div>
+                <div class="book-rec-price">₹{{ book.priceBuy }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typing indicator -->
+      <div class="message bot-message typing-indicator" *ngIf="isTyping">
+        <div class="message-content">
+          <div class="typing-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <input
-      [(ngModel)]="userInput"
-      placeholder="Type here..."
-      (keyup.enter)="handleUserInput()"
-    />
+    <div class="chat-input-area">
+      <input
+        [(ngModel)]="userInput"
+        placeholder="Ask me about books, recommendations, or help..."
+        (keydown)="onKeyPress($event)"
+        class="chat-input"
+      />
+      <button class="send-btn" (click)="handleUserInput()" [disabled]="!userInput.trim()">
+        📤
+      </button>
+    </div>
   </div>
 </div>

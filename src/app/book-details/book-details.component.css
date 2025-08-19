@@ -275,9 +275,50 @@
 }
 
 @media (max-width: 768px) {
+  .book-details {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    margin: 1.5rem auto;
+    max-width: 90%;
+  }
+
+  .details-cover {
+    width: 250px;
+    height: 375px;
+    align-self: center;
+  }
+
+  .book-details h2 {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+
+  .book-details p {
+    font-size: 1rem;
+  }
+
+  .price {
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: center;
+  }
+
+  .price p {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .action-button {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
   .reviews,
   .recommended {
-    padding: 2rem;
+    padding: 1.5rem;
+    margin: 2rem auto;
+    max-width: 90%;
   }
 
   .reviews h3,
@@ -288,5 +329,85 @@
   .recommended-list {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 1.5rem;
+  }
+
+  .review {
+    padding: 1rem 1.5rem;
+  }
+
+  .back-button {
+    position: static;
+    margin: 1rem;
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .book-details {
+    gap: 1rem;
+    padding: 1rem;
+    margin: 1rem auto;
+    max-width: 95%;
+  }
+
+  .details-cover {
+    width: 200px;
+    height: 300px;
+  }
+
+  .book-details h2 {
+    font-size: 1.4rem;
+  }
+
+  .book-details p {
+    font-size: 0.9rem;
+  }
+
+  .price p {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .action-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+  }
+
+  .reviews,
+  .recommended {
+    padding: 1rem;
+    margin: 1.5rem auto;
+    max-width: 95%;
+  }
+
+  .reviews h3,
+  .recommended h3 {
+    font-size: 1.4rem;
+  }
+
+  .recommended-list {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+
+  .recommended-card img {
+    height: 180px;
+  }
+
+  .review {
+    padding: 0.8rem 1rem;
+  }
+
+  .review strong {
+    font-size: 1rem;
+  }
+
+  .review p {
+    font-size: 0.9rem;
+  }
+
+  .back-button {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
   }
 }
