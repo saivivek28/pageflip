@@ -1,0 +1,94 @@
+<button (click)="goBack()" class="back-button">← Back to Profile</button>
+
+<div class="edit-profile-page" *ngIf="userData; else loading">
+  <div class="edit-profile-card">
+    <div class="edit-profile-header">
+      <img src="https://cdn-icons-png.flaticon.com/128/16869/16869838.png" alt="Profile" class="profile-pic" />
+      <h2>Edit Profile</h2>
+    </div>
+
+    <div class="edit-profile-form" *ngIf="!isEditing; else editingForm">
+      <div class="profile-info">
+        <div class="info-row">
+          <label>Name:</label>
+          <span>{{ userData?.name }}</span>
+        </div>
+        <div class="info-row">
+          <label>Email:</label>
+          <span>{{ userData?.email }}</span>
+        </div>
+        <div class="info-row" *ngIf="userData?.phone">
+          <label>Phone:</label>
+          <span>{{ userData?.phone }}</span>
+        </div>
+        <div class="info-row" *ngIf="userData?.address">
+          <label>Address:</label>
+          <span>{{ userData?.address }}</span>
+        </div>
+      </div>
+      
+      <div class="profile-actions">
+        <button class="edit-btn" (click)="toggleEdit()">Edit Profile</button>
+      </div>
+    </div>
+
+    <ng-template #editingForm>
+      <form class="edit-form" (ngSubmit)="saveProfile()">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            [(ngModel)]="userData.name" 
+            required
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            [(ngModel)]="userData.email" 
+            required
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone:</label>
+          <input 
+            type="tel" 
+            id="phone" 
+            name="phone" 
+            [(ngModel)]="userData.phone" 
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="address">Address:</label>
+          <textarea 
+            id="address" 
+            name="address" 
+            [(ngModel)]="userData.address" 
+            rows="3"
+            class="form-input"
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="save-btn">Save Changes</button>
+          <button type="button" class="cancel-btn" (click)="cancelEdit()">Cancel</button>
+        </div>
+      </form>
+    </ng-template>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="loading">Loading profile...</div>
+</ng-template>

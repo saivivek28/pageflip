@@ -8,6 +8,16 @@
     <input type="text" placeholder="User Name" [(ngModel)]="username" />
     <input type="password" placeholder="Password" [(ngModel)]="password" />
 
+    <label class="showpassword-label">
+  <input 
+    type="checkbox" 
+    class="showpassword-checkbox" 
+    (change)="showpassword()" 
+    [checked]="showPassword"
+  />
+  <span>{{ showPassword ? 'Hide Password' : 'Show Password' }}</span>
+</label>
+
     <button (click)="signup()">Sign Up</button>
 
     <p class="login-text">

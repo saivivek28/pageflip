@@ -21,7 +21,7 @@ import { SearchPipe } from '../search.pipe';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
-  apiUrl = 'http://localhost:3000/books';
+  apiUrl = 'http://127.0.0.1:5000/books';
   books: any = [];
   filteredBooks: any = [];
 

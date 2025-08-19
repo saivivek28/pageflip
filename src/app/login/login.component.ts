@@ -16,6 +16,7 @@ export class LoginComponent {
   username = '';
   email = '';
   password = '';
+  showPassword:boolean = false;
   logURL = 'http://127.0.0.1:5000/login';
 
   constructor(
@@ -32,7 +33,9 @@ export class LoginComponent {
     };
 
     this.http.post(this.logURL, reqBody).subscribe({
+
       next: (res: any) => {
+        console.log(res)
         if (res.token && res._id) {
           localStorage.setItem('JWT_token', res.token);
         
@@ -53,5 +56,8 @@ export class LoginComponent {
 
   signup() {
     this.router.navigate(['/signup']);
+  }
+  showpassword(){
+    this.showPassword = !this.showPassword
   }
 }

@@ -41,6 +41,32 @@
 .signup-container input:focus {
   border-color: #4a90e2;
   outline: none;
+
+}
+
+.showpassword-label {
+  display: flex;
+  align-items: center;   /* aligns checkbox & text vertically */
+  gap: 6px;
+  cursor: pointer;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #444;
+  line-height: 1;        /* prevents extra spacing in text */
+}
+
+.showpassword-checkbox {
+  width: 16px;
+  height: 16px;
+  margin: 0;             /* remove default extra margin */
+  position: relative;
+  top: 0.5px;            /* fine-tune vertical alignment */
+  cursor: pointer;
+}
+
+
+.showpassword-label:hover {
+  color: #6c63ff;
 }
 
 .signup-container button {

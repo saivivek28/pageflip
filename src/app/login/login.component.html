@@ -5,7 +5,16 @@
   <div class="login-container">
     <!-- <input type="text" placeholder="User Name" [(ngModel)]="username" />| -->
     <input type="email" placeholder="Enter email" [(ngModel)]="email"/>
-    <input type="password" placeholder="Enter your password" [(ngModel)]="password" />
+    <input [type]="showPassword ? 'text' : 'password' " placeholder="Enter your password" [(ngModel)]="password" />
+<label class="showpassword-label">
+  <input 
+    type="checkbox" 
+    class="showpassword-checkbox" 
+    (change)="showpassword()" 
+    [checked]="showPassword"
+  />
+  <span>{{ showPassword ? 'Hide Password' : 'Show Password' }}</span>
+</label>
     <button (click)="signIn()">Login</button>
     <p class="signup-text">
       Don't have an account?

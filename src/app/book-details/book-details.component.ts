@@ -29,7 +29,7 @@ export class BookDetailsComponent {
 
   loadBook() {
     const id = this.route.snapshot.paramMap.get('id');
-    this.http.get<any[]>('http://localhost:3000/books').subscribe((books) => {
+    this.http.get<any[]>('http://127.0.0.1:5000/books').subscribe((books) => {
       this.book = books.find((b) => b.bookId === id);
       this.loadReviews();
       this.loadRecommended(books);

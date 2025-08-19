@@ -18,6 +18,7 @@ export class SignupComponent {
   email: string = '';
   username: string = '';
   password: string = '';
+  showPassword:boolean = false;
 
   constructor(
     private router: Router,
@@ -63,6 +64,10 @@ export class SignupComponent {
         this.toastr.error(errorMsg);
       }
     });
+  }
+
+  showpassword(){
+    this.showPassword = !this.showPassword
   }
 
   login() {

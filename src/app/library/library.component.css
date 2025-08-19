@@ -1,5 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
+.back-button {
+   position: fixed;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 2rem;
+  padding: 0.5rem 1.5rem;
+  background: linear-gradient(90deg, #ff6b6b, #ff8e53);
+  border: none;
+  border-radius: 25px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.back-button:hover {
+  background: linear-gradient(90deg, #ff8e53, #ff6b6b);
+  transform: translateX(-3px);
+}
+
 h2 {
   text-align: center;
   margin: 2rem 0;
