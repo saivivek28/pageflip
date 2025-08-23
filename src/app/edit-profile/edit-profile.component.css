@@ -30,6 +30,26 @@
   border: 4px solid #667eea;
 }
 
+.image-actions {
+  margin-top: 10px;
+}
+
+.remove-img-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.remove-img-btn:hover {
+  background: #c0392b;
+}
+
 .edit-profile-header h2 {
   color: #333;
   margin: 0;

@@ -6,19 +6,28 @@
     
     <input type="email" placeholder="Email Address" [(ngModel)]="email" />
     <input type="text" placeholder="User Name" [(ngModel)]="username" />
-    <input type="password" placeholder="Password" [(ngModel)]="password" />
+    <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" [(ngModel)]="password" />
+    <input type="tel" placeholder="Phone Number" [(ngModel)]="phone" />
+    <input type="text" placeholder="Address" [(ngModel)]="address" />
+    <div style="margin-bottom: 1rem;">
+      <label style="font-size: 0.95rem; color: #444;">Profile Photo:</label>
+      <input type="file" accept="image/*" (change)="onProfileImageSelected($event)" style="margin-top: 0.5rem;" />
+      <div *ngIf="profileImageUrl" style="margin-top: 0.5rem; text-align: center;">
+        <img [src]="profileImageUrl" alt="Profile Preview" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid #4a90e2;" />
+      </div>
+    </div>
 
     <label class="showpassword-label">
-  <input 
-    type="checkbox" 
-    class="showpassword-checkbox" 
-    (change)="showpassword()" 
-    [checked]="showPassword"
-  />
-  <span>{{ showPassword ? 'Hide Password' : 'Show Password' }}</span>
-</label>
+      <input 
+        type="checkbox" 
+        class="showpassword-checkbox" 
+        (change)="showpassword()" 
+        [checked]="showPassword"
+      />
+      <span>{{ showPassword ? 'Hide Password' : 'Show Password' }}</span>
+    </label>
 
-    <button (click)="signup()">Sign Up</button>
+    <button (click)="signup()" [disabled]="imageUploading">{{ imageUploading ? 'Uploading...' : 'Sign Up' }}</button>
 
     <p class="login-text">
       Already have an Account?

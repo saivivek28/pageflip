@@ -4,21 +4,36 @@
   </div>
 
   <div class="nav-middle">
-    <input
-      type="text"
-      placeholder="Search books..."
-      [(ngModel)]="searchQuery"
-      (input)="onSearchChange()"
-      class="search-input"
-    />
+    <div class="search-container" title="Search by book title or author name">
+      <input
+        type="text"
+        placeholder="Search by book title or author..."
+        [(ngModel)]="searchQuery"
+        (input)="onSearchChange()"
+        (keyup.enter)="onSearchEnter()"
+        class="search-input"
+      />
+      <div class="search-icon">🔍</div>
+    </div>
   </div>
 
   <div class="nav-right">
     <button class="library-btn" [routerLink]="['/library']">My Library</button>
     
+    <button class="favorites-btn" [routerLink]="['/favorites']" title="My Favorites">
+      <span class="favorites-icon">❤️</span>
+      <span class="favorites-text">Favorites</span>
+    </button>
+    
+    <button class="theme-toggle-btn" (click)="toggleTheme()" [title]="theme.isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+      <span class="theme-icon" [class]="theme.isDarkMode ? 'moon-icon' : 'sun-icon'">
+        {{ theme.isDarkMode ? '🌙' : '☀️' }}
+      </span>
+    </button>
+    
     <div class="profile-section">
       <img 
-        src="https://cdn-icons-png.flaticon.com/128/9131/9131529.png" 
+        [src]="profileImageUrl" 
         [routerLink]="['/profile']" 
         alt="Profile" 
         class="profile-icon" 

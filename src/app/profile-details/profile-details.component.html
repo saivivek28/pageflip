@@ -7,6 +7,17 @@
       <p class="email">{{ userData?.email }}</p>
     </div>
 
+    <div class="profile-info">
+      <div class="info-row">
+        <label>Phone:</label>
+        <span>{{ userData?.phone || 'Not set' }}</span>
+      </div>
+      <div class="info-row">
+        <label>Address:</label>
+        <span>{{ userData?.address || 'Not set' }}</span>
+      </div>
+    </div>
+
     <div class="profile-actions">
       <button class="edit-btn" (click)="editProfile()">Edit Profile</button>
       <button class="logout-btn" (click)="logout()">Logout</button>

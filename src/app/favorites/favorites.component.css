@@ -24,7 +24,7 @@
   transform: translateX(-3px);
 }
 
-.library-container {
+.favorites-container {
   padding: 2rem;
   margin-top: 4rem;
   font-family: 'Poppins', sans-serif;
@@ -32,29 +32,67 @@
   border-radius: 12px;
 }
 
-.library-header {
+.favorites-header {
   text-align: center;
   margin-bottom: 3rem;
 }
 
-.library-header h2 {
+.favorites-header h2 {
   font-size: 3rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  background: linear-gradient(to right, #2c3e50, #3498db);
+  background: linear-gradient(to right, #e74c3c, #c0392b);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.library-subtitle {
+.favorites-subtitle {
   font-size: 1.2rem;
   color: #7f8c8d;
   font-weight: 400;
 }
 
-/* Library Controls */
-.library-controls {
+/* Search Section */
+.search-section {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.search-wrapper {
+  position: relative;
+  max-width: 500px;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1rem 3rem 1rem 1.5rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 25px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background: white;
+}
+
+.search-input:focus {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: #7f8c8d;
+}
+
+/* Favorites Controls */
+.favorites-controls {
   background: white;
   border-radius: 16px;
   padding: 2rem;
@@ -84,13 +122,13 @@
 }
 
 .view-btn:hover {
-  border-color: #3498db;
+  border-color: #e74c3c;
   transform: translateY(-2px);
 }
 
 .view-btn.active {
-  background: #3498db;
-  border-color: #3498db;
+  background: #e74c3c;
+  border-color: #e74c3c;
   color: white;
 }
 
@@ -133,13 +171,13 @@
 }
 
 .filter-chip:hover {
-  border-color: #3498db;
+  border-color: #e74c3c;
   transform: translateY(-1px);
 }
 
 .filter-chip.active {
-  background: #3498db;
-  border-color: #3498db;
+  background: #e74c3c;
+  border-color: #e74c3c;
   color: white;
 }
 
@@ -148,6 +186,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .sort-section label {
@@ -168,7 +207,26 @@
 
 .sort-select:focus {
   outline: none;
-  border-color: #3498db;
+  border-color: #e74c3c;
+}
+
+/* Clear Filters Button */
+.clear-filters-btn {
+  background: linear-gradient(90deg, #95a5a6, #7f8c8d);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.clear-filters-btn:hover {
+  background: linear-gradient(90deg, #7f8c8d, #95a5a6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(127, 140, 141, 0.3);
 }
 
 /* Empty State */
@@ -198,7 +256,7 @@
 }
 
 .browse-btn {
-  background: linear-gradient(90deg, #3498db, #2980b9);
+  background: linear-gradient(90deg, #e74c3c, #c0392b);
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -210,9 +268,9 @@
 }
 
 .browse-btn:hover {
-  background: linear-gradient(90deg, #2980b9, #3498db);
+  background: linear-gradient(90deg, #c0392b, #e74c3c);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
 }
 
 /* Book Container */
@@ -285,9 +343,6 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -296,8 +351,7 @@
   opacity: 1;
 }
 
-.favorite-btn,
-.remove-btn {
+.favorite-btn {
   width: 40px;
   height: 40px;
   border: none;
@@ -308,15 +362,13 @@
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
-}
-
-.favorite-btn {
   background: rgba(255, 255, 255, 0.9);
   color: #e74c3c;
 }
 
 .favorite-btn:hover {
-  background: white;
+  background: #e74c3c;
+  color: white;
   transform: scale(1.1);
 }
 
@@ -325,15 +377,16 @@
   color: white;
 }
 
-.remove-btn {
-  background: rgba(255, 255, 255, 0.9);
-  color: #7f8c8d;
-}
-
-.remove-btn:hover {
-  background: #e74c3c;
+.favorite-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(231, 76, 60, 0.9);
   color: white;
-  transform: scale(1.1);
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .book-info {
@@ -364,7 +417,7 @@
 }
 
 .book-genre strong {
-  color: #3498db;
+  color: #e74c3c;
 }
 
 .book-rating {
@@ -404,47 +457,118 @@
   color: #7f8c8d;
 }
 
-/* Load More */
-.load-more {
-  text-align: center;
-  margin-top: 2rem;
+/* Dark Mode Styles */
+body.dark .favorites-container,
+.dark-theme .favorites-container {
+  background: linear-gradient(180deg, #23272f 0%, #181a20 100%);
+  color: #e0e6ed;
 }
-
-.load-more-btn {
-  background: linear-gradient(90deg, #3498db, #2980b9);
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 25px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
+body.dark .favorites-header h2,
+.dark-theme .favorites-header h2 {
+  background: linear-gradient(to right, #ff7675, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
-
-.load-more-btn:hover:not(:disabled) {
-  background: linear-gradient(90deg, #2980b9, #3498db);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+body.dark .favorites-header .favorites-subtitle,
+.dark-theme .favorites-header .favorites-subtitle {
+  color: #b2becd;
 }
-
-.load-more-btn:disabled {
-  background: #bdc3c7;
-  cursor: not-allowed;
-  transform: none;
+body.dark .favorites-controls,
+.dark-theme .favorites-controls {
+  background: #23272f;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  border: 1px solid #23272f;
+}
+body.dark .search-input,
+.dark-theme .search-input {
+  background: #23272f;
+  color: #e0e6ed;
+  border-color: #444a5a;
+}
+body.dark .search-input:focus,
+.dark-theme .search-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+}
+body.dark .filter-chip,
+.dark-theme .filter-chip {
+  background: #23272f;
+  color: #e0e6ed;
+  border-color: #444a5a;
+}
+body.dark .filter-chip.active,
+.dark-theme .filter-chip.active {
+  background: #6366f1;
+  border-color: #6366f1;
+  color: #fff;
+}
+body.dark .sort-select,
+.dark-theme .sort-select {
+  background: #23272f;
+  color: #e0e6ed;
+  border-color: #444a5a;
+}
+body.dark .clear-filters-btn,
+.dark-theme .clear-filters-btn {
+  background: linear-gradient(90deg, #636e72, #6366f1);
+  color: #fff;
+}
+body.dark .empty-state,
+.dark-theme .empty-state {
+  background: #23272f;
+  color: #e0e6ed;
+}
+body.dark .book-card,
+.dark-theme .book-card {
+  background: #181a20;
+  color: #e0e6ed;
+  border: 1px solid #23272f;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+body.dark .book-title,
+.dark-theme .book-title {
+  color: #fff;
+}
+body.dark .book-author,
+.dark-theme .book-author,
+body.dark .book-genre,
+.dark-theme .book-genre,
+body.dark .book-date,
+.dark-theme .book-date {
+  color: #b2becd;
+}
+body.dark .favorite-btn,
+.dark-theme .favorite-btn {
+  background: #23272f;
+  color: #ff7675;
+}
+body.dark .favorite-btn.favorited,
+.dark-theme .favorite-btn.favorited {
+  background: #ff7675;
+  color: #fff;
+}
+body.dark .favorite-badge,
+.dark-theme .favorite-badge {
+  background: #6366f1;
+}
+body.dark .browse-btn,
+.dark-theme .browse-btn {
+  background: linear-gradient(90deg, #6366f1, #636e72);
+  color: #fff;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .library-container {
+  .favorites-container {
     padding: 1rem;
   }
   
-  .library-header h2 {
+  .favorites-header h2 {
     font-size: 2.5rem;
   }
   
-  .library-controls {
+  .favorites-controls {
     padding: 1.5rem;
   }
   
@@ -468,18 +592,22 @@
     margin-right: 0;
     margin-bottom: 1rem;
   }
+  
+  .search-wrapper {
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
-  .library-header h2 {
+  .favorites-header h2 {
     font-size: 2rem;
   }
   
-  .library-subtitle {
+  .favorites-subtitle {
     font-size: 1rem;
   }
   
-  .library-controls {
+  .favorites-controls {
     padding: 1rem;
   }
   
@@ -500,4 +628,10 @@
     flex-direction: column;
     align-items: stretch;
   }
+  
+  .search-input {
+    padding: 0.8rem 2.5rem 0.8rem 1.2rem;
+    font-size: 0.9rem;
+  }
 }
+

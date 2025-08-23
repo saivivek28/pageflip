@@ -1,13 +1,27 @@
 <button [routerLink]="['/home']" class="back-button">← Back to Home</button>
 
-<div class="library-container">
-  <div class="library-header">
-    <h2>My Library</h2>
-    <p class="library-subtitle">Your personal collection of books</p>
+<div class="favorites-container">
+  <div class="favorites-header">
+    <h2>My Favorites</h2>
+    <p class="favorites-subtitle">Your beloved collection of books</p>
   </div>
 
-  <!-- Library Controls -->
-  <div class="library-controls">
+  <!-- Search Bar -->
+  <div class="search-section">
+    <div class="search-wrapper">
+      <input
+        type="text"
+        placeholder="Search favorites by title or author..."
+        [(ngModel)]="searchQuery"
+        (input)="onSearchChange()"
+        class="search-input"
+      />
+      <span class="search-icon">🔍</span>
+    </div>
+  </div>
+
+  <!-- Favorites Controls -->
+  <div class="favorites-controls">
     <!-- View Toggle -->
     <div class="view-toggle">
       <button 
@@ -42,19 +56,6 @@
       </div>
 
       <div class="filter-group">
-        <label>Year:</label>
-        <div class="filter-chips">
-          <button 
-            *ngFor="let year of availableYears" 
-            [class.active]="selectedYears.includes(year)"
-            (click)="toggleYearFilter(year)"
-            class="filter-chip">
-            {{ year }}
-          </button>
-        </div>
-      </div>
-
-      <div class="filter-group">
         <label>Rating:</label>
         <div class="filter-chips">
           <button 
@@ -78,33 +79,39 @@
         <option value="author-desc">Author Z-A</option>
         <option value="rating">Rating (High to Low)</option>
         <option value="rating-desc">Rating (Low to High)</option>
-        <option value="date-added">Date Added</option>
       </select>
     </div>
+
+    <!-- Clear Filters -->
+    <button 
+      *ngIf="hasActiveFilters()" 
+      (click)="clearAllFilters()" 
+      class="clear-filters-btn">
+      Clear All Filters
+    </button>
   </div>
 
   <!-- Empty State -->
-  <div *ngIf="filteredLibraryBooks.length === 0" class="empty-state">
-    <div class="empty-icon">📚</div>
-    <h3>No books found</h3>
+  <div *ngIf="filteredFavoriteBooks.length === 0" class="empty-state">
+    <div class="empty-icon">💔</div>
+    <h3>No favorite books found</h3>
     <p *ngIf="hasActiveFilters()">Try adjusting your filters or search criteria.</p>
-    <p *ngIf="!hasActiveFilters()">You haven't added any books to your library yet.</p>
+    <p *ngIf="!hasActiveFilters() && favoriteBooks.length === 0">You haven't added any books to your favorites yet.</p>
+    <p *ngIf="!hasActiveFilters() && favoriteBooks.length > 0">All your favorite books are hidden by current filters.</p>
     <button class="browse-btn" [routerLink]="['/home']">Browse Books</button>
   </div>
 
   <!-- Book Grid/List -->
   <div class="book-container" [class.list-view]="viewMode === 'list'">
-    <div class="book-card" *ngFor="let book of filteredLibraryBooks; let i = index">
+    <div class="book-card" *ngFor="let book of filteredFavoriteBooks; let i = index">
       <div class="book-cover-container">
         <img [src]="book.coverImage" [alt]="book.title" class="book-cover" />
         <div class="book-overlay">
-          <button class="favorite-btn" (click)="toggleFavorite(book)" [class.favorited]="book.isFavorite">
-            <span class="heart-icon">{{ book.isFavorite ? '❤️' : '🤍' }}</span>
-          </button>
-          <button class="remove-btn" (click)="removeBook(i)" title="Remove from Library">
-            🗑️
+          <button class="favorite-btn favorited" (click)="removeFromFavorites(book)" title="Remove from Favorites">
+            <span class="heart-icon">❤️</span>
           </button>
         </div>
+        <div class="favorite-badge">❤️</div>
       </div>
       
       <div class="book-info">
@@ -125,11 +132,5 @@
       </div>
     </div>
   </div>
-
-  <!-- Load More -->
-  <div class="load-more" *ngIf="hasMoreBooks && filteredLibraryBooks.length > 0">
-    <button class="load-more-btn" (click)="loadMoreBooks()" [disabled]="isLoading">
-      {{ isLoading ? 'Loading...' : 'Load More Books' }}
-    </button>
-  </div>
 </div>
+

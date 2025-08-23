@@ -3,15 +3,31 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   private darkModeKey = 'darkMode';
+  private _isDarkMode: boolean = false;
 
   constructor() {
-    const isDark = localStorage.getItem(this.darkModeKey) === 'true';
-    if (isDark) document.body.classList.add('dark-mode');
+    try {
+      this._isDarkMode = localStorage.getItem(this.darkModeKey) === 'true';
+      if (this._isDarkMode) {
+        document.body.classList.add('dark-mode');
+      }
+    } catch (error) {
+      console.warn('Could not access localStorage for theme preference:', error);
+      this._isDarkMode = false;
+    }
+  }
+
+  get isDarkMode(): boolean {
+    return this._isDarkMode;
   }
 
   toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-    localStorage.setItem(this.darkModeKey, String(isDark));
+    try {
+      document.body.classList.toggle('dark-mode');
+      this._isDarkMode = document.body.classList.contains('dark-mode');
+      localStorage.setItem(this.darkModeKey, String(this._isDarkMode));
+    } catch (error) {
+      console.warn('Could not save theme preference to localStorage:', error);
+    }
   }
 }

@@ -3,8 +3,11 @@
 <div class="edit-profile-page" *ngIf="userData; else loading">
   <div class="edit-profile-card">
     <div class="edit-profile-header">
-      <img src="https://cdn-icons-png.flaticon.com/128/16869/16869838.png" alt="Profile" class="profile-pic" />
+      <img [src]="previewImageUrl || userData?.profileImageUrl || 'https://cdn-icons-png.flaticon.com/128/16869/16869838.png'" alt="Profile" class="profile-pic" />
       <h2>Edit Profile</h2>
+      <div class="image-actions">
+        <button type="button" class="remove-img-btn" (click)="onRemoveImage()">Remove Photo</button>
+      </div>
     </div>
 
     <div class="edit-profile-form" *ngIf="!isEditing; else editingForm">
@@ -34,6 +37,17 @@
 
     <ng-template #editingForm>
       <form class="edit-form" (ngSubmit)="saveProfile()">
+        <div class="form-group">
+          <label for="profileImage">Profile Image:</label>
+          <input 
+            type="file" 
+            id="profileImage" 
+            name="profileImage" 
+            accept="image/*" 
+            (change)="onImageSelected($event)"
+            class="form-input"
+          />
+        </div>
         <div class="form-group">
           <label for="name">Name:</label>
           <input 

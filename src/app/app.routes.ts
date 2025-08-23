@@ -7,6 +7,7 @@ import { LibraryComponent } from './library/library.component';
 import { AuthGuard } from './auth.guard';
 import { ProfileDetailsComponent } from './profile-details/profile-details.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { FavoritesComponent } from './favorites/favorites.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'book/:id', component: BookDetailsComponent, canActivate: [AuthGuard] },
   { path: 'library', component: LibraryComponent, canActivate: [AuthGuard] },
+  { path: 'favorites', component: FavoritesComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileDetailsComponent, canActivate: [AuthGuard] },
   { path: 'edit-profile', component: EditProfileComponent, canActivate: [AuthGuard] }
 ];

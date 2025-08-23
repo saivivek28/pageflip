@@ -1,4 +1,72 @@
-<app-navbar (search)="searchQuery = $event"></app-navbar>
+<app-navbar (search)="onSearch($event)"></app-navbar>
+
+<!-- Hero Section -->
+<div class="hero-section">
+  <!-- <video class="hero-video" autoplay muted loop playsinline preload="auto">
+    <source src="https://videos.pexels.com/video-files/9584768/9584768-uhd_4096_2160_25fps.mp4" type="video/mp4" />
+  </video>  -->
+  <div class="hero-content">
+    <h1 class="hero-title">Discover Your Next Great Read</h1>
+    <p class="hero-subtitle">Explore thousands of books across all genres. Find your perfect story today.</p>
+    
+    <!-- Call to Action Button -->
+    <div class="hero-cta">
+      <button class="cta-button" (click)="scrollToBooks()">
+        <span class="cta-icon">📚</span>
+        Explore Books
+      </button>
+    </div>
+  </div>
+  
+  <!-- Featured Books Carousel -->
+   
+  <div class="featured-carousel" *ngIf="featuredBooks.length > 0">
+    <h3 class="hero-title">
+      <span class="title-icon">⭐</span>
+      {{ isNewUser ? 'Discover Amazing Books' : 'Your Favorites & Recommendations' }}
+    </h3>
+    <div class="carousel-container">
+      <button class="carousel-btn carousel-prev" (click)="previousSlide()" [disabled]="currentSlide === 0">
+        <span class="btn-icon">‹</span>
+      </button>
+      <div class="carousel-track" [style.transform]="'translateX(' + carouselOffset + 'px)'">
+        <div class="carousel-item" *ngFor="let book of featuredBooks; let i = index" [routerLink]="['/book', book.bookId]">
+          <div class="featured-book-card">
+            <div class="book-cover-wrapper">
+              <img [src]="book.coverImage" [alt]="book.title" class="featured-book-cover" />
+              <div class="featured-overlay">
+                <span class="featured-badge">
+                  {{ isNewUser ? 'Popular' : (book.isFavorite ? 'Favorite' : 'Recommended') }}
+                </span>
+              </div>
+            </div>
+            <div class="featured-book-info">
+              <h4 class="featured-book-title">{{ book.title }}</h4>
+              <p class="featured-book-author">by {{ book.author }}</p>
+              <div class="featured-rating">
+                <span class="stars">★★★★★</span>
+                <span class="rating-text">5.0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-btn carousel-next" (click)="nextSlide()" [disabled]="currentSlide >= maxSlides">
+        <span class="btn-icon">›</span>
+      </button>
+    </div>
+    
+    <!-- Carousel Indicators -->
+    <div class="carousel-indicators" *ngIf="featuredBooks.length > 3">
+      <span 
+        *ngFor="let indicator of getCarouselIndicators(); let i = index"
+        class="indicator" 
+        [class.active]="i === currentSlide"
+        (click)="goToSlide(i)">
+      </span>
+    </div>
+  </div>
+</div>
 
 <div class="genre-toggle">
   <button
@@ -14,17 +82,12 @@
   >
     {{ genre }}
   </button>
-  
 </div>
-
-
 
 <div class="book-list">
   <div class="book-card"
-    *ngFor="let book of filteredBooks | search:searchQuery"
+    *ngFor="let book of pagedBooks"
     [routerLink]="['/book', book.bookId]">
-
-
 
     <div class="ribbon">Buy 2 Get 1</div>
 
@@ -47,6 +110,18 @@
     </div>
   </div>
 </div>
+
+<!-- Pagination -->
+<div class="pagination" *ngIf="filteredAndSearchedBooks.length > pageSize">
+  <button class="page-btn" (click)="prevPage()" [disabled]="currentPage === 1">Prev</button>
+  <button 
+    class="page-btn"
+    *ngFor="let p of [].constructor(totalPages); let i = index" 
+    [class.active]="(i+1) === currentPage"
+    (click)="goToPage(i+1)">{{ i+1 }}</button>
+  <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+  <span class="page-info">Page {{currentPage}} of {{totalPages}}</span>
+  </div>
 <!-- ✅ Enhanced Chatbot -->
 <div class="chatbot-container" [class.open]="chatOpen">
   <div class="chat-header" (click)="toggleChat()">

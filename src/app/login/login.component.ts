@@ -48,7 +48,7 @@ export class LoginComponent {
         }
       },
       error: (err) => {
-        const errorMsg = err.error?.error || 'Invalid email or password';
+        const errorMsg = err.error?.error;
         this.toastr.error(errorMsg);
       }
     });
