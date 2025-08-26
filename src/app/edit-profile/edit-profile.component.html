@@ -1,108 +1,89 @@
-<button (click)="goBack()" class="back-button">← Back to Profile</button>
-
-<div class="edit-profile-page" *ngIf="userData; else loading">
-  <div class="edit-profile-card">
-    <div class="edit-profile-header">
-      <img [src]="previewImageUrl || userData?.profileImageUrl || 'https://cdn-icons-png.flaticon.com/128/16869/16869838.png'" alt="Profile" class="profile-pic" />
-      <h2>Edit Profile</h2>
-      <div class="image-actions">
-        <button type="button" class="remove-img-btn" (click)="onRemoveImage()">Remove Photo</button>
+<div class="edit-profile-container">
+  <button (click)="goBack()" class="back-btn">← Back to Profile</button>
+  
+  <div class="edit-profile-card" *ngIf="userData; else loading">
+    <h2>Edit Profile</h2>
+    
+    <!-- Profile Image Section -->
+    <div class="profile-image-section">
+      <div class="profile-image-wrapper">
+        <img [src]="getProfileImageUrl()" alt="Profile" class="profile-image" />
       </div>
+      <div class="image-controls">
+        <button class="upload-btn" (click)="fileInput.click()" [class.disabled]="imageUploading">
+          📷 Change Photo
+        </button>
+        <button class="remove-btn" *ngIf="hasCustomProfileImage()" (click)="onRemoveImage()" [disabled]="imageUploading">
+          🗑️ Remove
+        </button>
+      </div>
+      <div class="image-info" *ngIf="imageUploading">
+        <div class="loading-spinner"></div>
+        <span class="text-muted">Uploading...</span>
+      </div>
+      <input #fileInput type="file" accept="image/*" (change)="onImageSelected($event)" style="display: none;">
+      <p class="image-hint">Use Change Photo to upload a new picture. JPEG/PNG/GIF up to 10MB.</p>
     </div>
 
-    <div class="edit-profile-form" *ngIf="!isEditing; else editingForm">
-      <div class="profile-info">
-        <div class="info-row">
-          <label>Name:</label>
-          <span>{{ userData?.name }}</span>
-        </div>
-        <div class="info-row">
-          <label>Email:</label>
-          <span>{{ userData?.email }}</span>
-        </div>
-        <div class="info-row" *ngIf="userData?.phone">
-          <label>Phone:</label>
-          <span>{{ userData?.phone }}</span>
-        </div>
-        <div class="info-row" *ngIf="userData?.address">
-          <label>Address:</label>
-          <span>{{ userData?.address }}</span>
-        </div>
+    <!-- Profile Form -->
+    <form class="profile-form" (ngSubmit)="saveProfile()">
+      <div class="form-row">
+        <label for="name">Name:</label>
+        <input 
+          type="text" 
+          id="name" 
+          [(ngModel)]="userData.name" 
+          name="name"
+          required
+          class="form-control"
+        />
       </div>
-      
-      <div class="profile-actions">
-        <button class="edit-btn" (click)="toggleEdit()">Edit Profile</button>
+
+      <div class="form-row">
+        <label for="email">Email:</label>
+        <input 
+          type="email" 
+          id="email" 
+          [(ngModel)]="userData.email" 
+          name="email"
+          required
+          class="form-control"
+        />
       </div>
-    </div>
 
-    <ng-template #editingForm>
-      <form class="edit-form" (ngSubmit)="saveProfile()">
-        <div class="form-group">
-          <label for="profileImage">Profile Image:</label>
-          <input 
-            type="file" 
-            id="profileImage" 
-            name="profileImage" 
-            accept="image/*" 
-            (change)="onImageSelected($event)"
-            class="form-input"
-          />
-        </div>
-        <div class="form-group">
-          <label for="name">Name:</label>
-          <input 
-            type="text" 
-            id="name" 
-            name="name" 
-            [(ngModel)]="userData.name" 
-            required
-            class="form-input"
-          />
-        </div>
+      <div class="form-row">
+        <label for="phone">Phone:</label>
+        <input 
+          type="tel" 
+          id="phone" 
+          [(ngModel)]="userData.phone" 
+          name="phone"
+          class="form-control"
+        />
+      </div>
 
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input 
-            type="email" 
-            id="email" 
-            name="email" 
-            [(ngModel)]="userData.email" 
-            required
-            class="form-input"
-          />
-        </div>
+      <div class="form-row">
+        <label for="address">Address:</label>
+        <textarea 
+          id="address" 
+          [(ngModel)]="userData.address" 
+          name="address"
+          rows="3"
+          class="form-control"
+        ></textarea>
+      </div>
 
-        <div class="form-group">
-          <label for="phone">Phone:</label>
-          <input 
-            type="tel" 
-            id="phone" 
-            name="phone" 
-            [(ngModel)]="userData.phone" 
-            class="form-input"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="address">Address:</label>
-          <textarea 
-            id="address" 
-            name="address" 
-            [(ngModel)]="userData.address" 
-            rows="3"
-            class="form-input"
-          ></textarea>
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" class="save-btn">Save Changes</button>
-          <button type="button" class="cancel-btn" (click)="cancelEdit()">Cancel</button>
-        </div>
-      </form>
-    </ng-template>
+      <div class="form-actions">
+        <button type="submit" class="save-btn" [disabled]="imageUploading">Save Changes</button>
+        <button type="button" class="cancel-btn" (click)="goBack()">Cancel</button>
+      </div>
+    </form>
   </div>
+
+  <ng-template #loading>
+    <div class="loading-spinner">Loading profile...</div>
+  </ng-template>
 </div>
 
-<ng-template #loading>
-  <div class="loading">Loading profile...</div>
-</ng-template>
+<!-- Toast Notifications -->
+<app-toast></app-toast>

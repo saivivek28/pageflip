@@ -1,63 +1,69 @@
-import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import { Router, RouterLink } from '@angular/router';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { AuthService } from '../services/auth.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterModule, FormsModule, CommonModule, HttpClientModule],
+  imports: [RouterLink, FormsModule, CommonModule, HttpClientModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrl: './login.component.css'
 })
 export class LoginComponent {
   username = '';
   email = '';
   password = '';
   showPassword:boolean = false;
-  logURL = 'http://127.0.0.1:5000/login';
+  isLoading = false;
+  isAdminLogin = false;
 
   constructor(
     private router: Router,
     private http: HttpClient,
-    private toastr: ToastrService
+    private authService: AuthService,
+    private toast: ToastService
   ) {}
 
+  setLoginType(isAdmin: boolean) {
+    this.isAdminLogin = isAdmin;
+    // Clear form when switching login types
+    this.email = '';
+    this.password = '';
+  }
+
   signIn() {
-    const reqBody = {
-      
-      email: this.email,
-      password: this.password
-    };
+    if (!this.email || !this.password) {
+      this.toast.error('Validation', 'Please enter both email and password');
+      return;
+    }
 
-    this.http.post(this.logURL, reqBody).subscribe({
+    this.isLoading = true;
+    
+    const loginMethod = this.isAdminLogin ? 
+      this.authService.adminLogin({
+        email: this.email,
+        password: this.password
+      }) : 
+      this.authService.login({
+        email: this.email,
+        password: this.password
+      });
 
-      next: (res: any) => {
-        console.log(res)
-        if (res.token && res._id) {
-          localStorage.setItem('JWT_token', res.token);
-        
-          localStorage.setItem('id', res._id);
-          this.toastr.success(res.message || 'Login successful');
-          
-          this.router.navigate(['/home']);
-        } else {
-          this.toastr.error(res.error || 'Login failed. Please try again.');
-        }
+    loginMethod.subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        // Navigation is handled by AuthService based on role
       },
       error: (err) => {
-        const errorMsg = err.error?.error;
-        this.toastr.error(errorMsg);
+        this.isLoading = false;
+        const errorMsg = err.error?.error || 'Login failed. Please try again.';
+        this.toast.error('Login failed', errorMsg);
       }
     });
   }
 
-  signup() {
-    this.router.navigate(['/signup']);
-  }
-  showpassword(){
-    this.showPassword = !this.showPassword
-  }
 }

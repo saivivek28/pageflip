@@ -48,7 +48,7 @@
       class="recommended-card"
       *ngFor="let rec of recommendedBooks"
     >
-      <a [routerLink]="['/book', rec.bookId]" class="recommended-link">
+      <a [routerLink]="['/book', rec._id]" class="recommended-link">
         <img [src]="rec.coverImage" alt="{{ rec.title }}" />
         <p>{{ rec.title }}</p>
         <small>by {{ rec.author }}</small>

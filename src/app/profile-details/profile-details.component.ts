@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -8,13 +8,14 @@ import { filter, Subscription } from 'rxjs';
 @Component({
   selector: 'app-profile-details',
   standalone: true,
-  imports:[FormsModule, CommonModule,RouterLink],
+  imports:[FormsModule, CommonModule, RouterLink, HttpClientModule],
   templateUrl: './profile-details.component.html',
-  styleUrls: ['./profile-details.component.css']
+  styleUrl: './profile-details.component.css'
 })
 export class ProfileDetailsComponent implements OnInit, OnDestroy {
   userData: any;
   private routerSubscription: Subscription;
+  private profileImageUpdateListener: (event: Event) => void;
 
   constructor(private http: HttpClient, private router: Router) {
     // Subscribe to router events to refresh data when navigating back
@@ -26,28 +27,38 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
         this.loadUserData();
       }
     });
+
+    // Listen for profile image updates from edit-profile component
+    this.profileImageUpdateListener = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      if (this.userData && customEvent.detail) {
+        this.userData.profileImageUrl = customEvent.detail.imageUrl;
+      }
+    };
   }
 
   ngOnInit() {
     this.loadUserData();
+    // Add event listener for profile image updates
+    window.addEventListener('profileImageUpdated', this.profileImageUpdateListener);
   }
 
   ngOnDestroy() {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
     }
+    // Remove event listener
+    window.removeEventListener('profileImageUpdated', this.profileImageUpdateListener);
   }
 
   loadUserData() {
-    const userId = localStorage.getItem('id') || ((): string | null => {
-      try { const u = JSON.parse(localStorage.getItem('userData') || '{}'); return u?._id || u?.id || null; } catch { return null; }
-    })();
+    let userId = localStorage.getItem('id') || localStorage.getItem('userId');
     if (!userId) {
       this.router.navigate(['/login']);
       return;
     }
-
-    // Try to get user data from localStorage first
+  
+    // Load cached data for fast UI
     const localUserData = localStorage.getItem('userData');
     if (localUserData) {
       try {
@@ -56,37 +67,24 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
         console.error('Error parsing local user data', e);
       }
     }
-
-    // Also try to fetch from API if available
+  
+    // Fetch fresh data
     this.http.get(`http://127.0.0.1:5000/user/${userId}`).subscribe({
-      next: (res) => {
-        // Base merge
-        const merged = { ...(this.userData || {}), ...(res as any) } as any;
-        // Prefer non-empty local values for phone/address if API is missing/empty
-        const localPhone = (this.userData && this.userData.phone) || localStorage.getItem('phone') || '';
-        const localAddress = (this.userData && this.userData.address) || localStorage.getItem('address') || '';
-        const prefer = (apiVal: any, localVal: string) => (apiVal !== undefined && apiVal !== null && apiVal !== '' ? apiVal : localVal);
-        merged.phone = prefer((res as any).phone, localPhone);
-        merged.address = prefer((res as any).address, localAddress);
-        this.userData = merged;
-        // Store merged data in localStorage for future use
+      next: (res: any) => {
+        this.userData = res;
+        // make sure userData also contains `id` or `_id` for later use
         localStorage.setItem('userData', JSON.stringify(this.userData));
-        if (this.userData.phone) localStorage.setItem('phone', this.userData.phone);
-        if (this.userData.address) localStorage.setItem('address', this.userData.address);
+        localStorage.setItem('id', res.id || res._id);  // ✅ ensure id stored consistently
       },
-      error: (err) => {
-        console.log('API not available, using local data');
-        // If API is not available and we don't have local data, create default
-        if (!this.userData) {
-          this.userData = {
-            name: localStorage.getItem('name') || 'User',
-            email: localStorage.getItem('email') || 'user@example.com',
-            phone: localStorage.getItem('phone') || '',
-            address: localStorage.getItem('address') || ''
-          };
-        }
+      error: (err: any) => {
+        console.error('Failed to fetch user data from API', err);
       }
     });
+  }
+  
+
+  getProfileImageUrl(): string {
+    return this.userData?.profileImageUrl || 'https://placehold.co/150x150/cccccc/666666?text=Profile&font=roboto';
   }
 
   logout() {

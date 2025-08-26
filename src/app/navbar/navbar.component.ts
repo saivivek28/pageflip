@@ -4,11 +4,12 @@ import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ThemeService } from '../theme.service';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports:[FormsModule, CommonModule, HttpClientModule, RouterLink],
+  imports: [FormsModule, CommonModule, HttpClientModule, RouterLink],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -20,9 +21,21 @@ export class NavbarComponent implements OnInit {
 
   @Output() search = new EventEmitter<string>();
 
+  private searchSubject = new Subject<string>(); // 🔥 RxJS Subject
+
   constructor(private router: Router, private http: HttpClient, public theme: ThemeService) {}
 
   ngOnInit() {
+    // ✅ Debounce search to wait until user pauses typing
+    this.searchSubject
+      .pipe(debounceTime(350), distinctUntilChanged()) // wait 300ms & ignore same values
+      .subscribe(query => {
+        this.search.emit(query);
+        // Auto navigate when typing
+        this.router.navigate(['/home'], { queryParams: { q: query || '', scroll: '1' } });
+      });
+
+    // Fetch user details
     const userId = localStorage.getItem('id') || ((): string | null => {
       try { const u = JSON.parse(localStorage.getItem('userData') || '{}'); return u?._id || u?.id || null; } catch { return null; }
     })();
@@ -32,34 +45,24 @@ export class NavbarComponent implements OnInit {
           const localUserData = (() => {
             try { return JSON.parse(localStorage.getItem('userData') || '{}'); } catch { return {}; }
           })();
-          // Merge to preserve profileImageUrl if API doesn't include it
           this.userData = { ...(localUserData || {}), ...(res as any) };
         },
         error: (err) => {
           console.error('Error fetching user data', err);
-          // Fallback to local user data if available
           try { this.userData = JSON.parse(localStorage.getItem('userData') || '{}'); } catch {}
         }
       });
     }
-    
-    // Initialize theme state - ensure it's properly initialized
-    try {
-      const isDark = this.theme.isDarkMode;
-      console.log('Theme initialized:', isDark ? 'Dark' : 'Light');
-    } catch (error) {
-      console.warn('Theme initialization error:', error);
-    }
   }
 
+  // Instead of directly emitting → push into subject
   onSearchChange() {
-    this.search.emit(this.searchQuery);
+    this.searchSubject.next(this.searchQuery);
   }
 
+  // Still handle Enter key → immediate search
   onSearchEnter() {
-    // Trigger search on Enter key press
     this.search.emit(this.searchQuery);
-    // Navigate to home with query params to trigger scroll
     this.router.navigate(['/home'], { queryParams: { q: this.searchQuery || '', scroll: '1' } });
   }
 
@@ -73,7 +76,6 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
-    // Your logout logic here
     this.router.navigate(['/login']);
     console.log("User logged out");
   }
@@ -84,11 +86,4 @@ export class NavbarComponent implements OnInit {
     }
     return 'https://cdn-icons-png.flaticon.com/128/9131/9131529.png';
   }
-
-
-  // logout() {
-  //   localStorage.removeItem('userId');
-  //   localStorage.removeItem('token');
-  //   this.router.navigate(['/login']);
-  // }
 }

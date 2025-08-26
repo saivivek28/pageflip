@@ -1,0 +1,94 @@
+<div class="reader-header">
+  <button class="back-btn" (click)="goBack()">
+    <span class="back-icon">←</span>
+    Back
+  </button>
+  
+  <div class="book-info">
+    <h1 class="book-title">{{ book?.title }}</h1>
+    <p class="book-author">by {{ book?.author }}</p>
+  </div>
+  
+  <div class="reader-controls">
+    <button class="fullscreen-btn" (click)="toggleFullscreen()" [title]="isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'">
+      <span class="fullscreen-icon">{{ isFullscreen ? '⛶' : '⛶' }}</span>
+    </button>
+  </div>
+</div>
+
+<div class="reader-container" #readerContainer [class.fullscreen]="isFullscreen">
+  <div class="page-container">
+    <!-- Previous page preview (for animation) -->
+    <div class="page-preview previous" *ngIf="currentPage > 1">
+      <div class="page-content">
+        {{ pages[currentPage - 2] }}
+      </div>
+    </div>
+    
+    <!-- Current page -->
+    <div class="page current" [class.animating]="isAnimating">
+      <div class="page-content">
+        <div class="page-number">{{ currentPage }}</div>
+        <div class="page-text">
+          {{ currentPageContent }}
+        </div>
+      </div>
+    </div>
+    
+    <!-- Next page preview (for animation) -->
+    <div class="page-preview next" *ngIf="currentPage < totalPages">
+      <div class="page-content">
+        {{ pages[currentPage] }}
+      </div>
+    </div>
+  </div>
+  
+  <!-- Navigation buttons (visible on desktop) -->
+  <div class="nav-buttons desktop-only">
+    <button 
+      class="nav-btn prev-btn" 
+      (click)="previousPage()" 
+      [disabled]="currentPage <= 1 || isAnimating"
+      title="Previous Page (← or swipe right)">
+      <span class="nav-icon">‹</span>
+    </button>
+    
+    <button 
+      class="nav-btn next-btn" 
+      (click)="nextPage()" 
+      [disabled]="currentPage >= totalPages || isAnimating"
+      title="Next Page (→ or swipe left)">
+      <span class="nav-icon">›</span>
+    </button>
+  </div>
+  
+  <!-- Touch gesture hint (mobile only) -->
+  <div class="touch-hint mobile-only" *ngIf="currentPage === 1">
+    <p>👆 Swipe left for next page, right for previous</p>
+  </div>
+</div>
+
+<div class="reader-footer">
+  <div class="progress-container">
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+    </div>
+    <div class="progress-info">
+      <span class="current-page">{{ currentPage }}</span>
+      <span class="page-separator">/</span>
+      <span class="total-pages">{{ totalPages }}</span>
+    </div>
+  </div>
+  
+  <div class="page-input">
+    <label for="pageJump">Go to page:</label>
+    <input 
+      type="number" 
+      id="pageJump" 
+      min="1" 
+      [max]="totalPages" 
+      [value]="currentPage"
+      (keyup.enter)="onPageInputEnter($event)"
+      class="page-input-field">
+  </div>
+</div>

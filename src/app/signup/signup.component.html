@@ -1,37 +1,142 @@
 <div class="signup-wrapper">
-  <h1>Hello, Welcome to PageFlip!</h1>
-  <p class="subtitle">Create Account</p>
+  <!-- Background Animation -->
+  <div class="bg-animation">
+    <div class="floating-book book1">📚</div>
+    <div class="floating-book book2">📖</div>
+    <div class="floating-book book3">📕</div>
+    <div class="floating-book book4">📘</div>
+  </div>
 
-  <div class="signup-container">
+  <!-- Main Content -->
+  <div class="signup-content">
+    <!-- Logo/Brand Section -->
+    <div class="brand-section">
+      <div class="logo-container">
+        <div class="logo-icon">📚</div>
+        <h1 class="brand-name">PageFlip</h1>
+      </div>
+      <p class="brand-tagline">Join Your Digital Library Experience</p>
+    </div>
     
-    <input type="email" placeholder="Email Address" [(ngModel)]="email" />
-    <input type="text" placeholder="User Name" [(ngModel)]="username" />
-    <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" [(ngModel)]="password" />
-    <input type="tel" placeholder="Phone Number" [(ngModel)]="phone" />
-    <input type="text" placeholder="Address" [(ngModel)]="address" />
-    <div style="margin-bottom: 1rem;">
-      <label style="font-size: 0.95rem; color: #444;">Profile Photo:</label>
-      <input type="file" accept="image/*" (change)="onProfileImageSelected($event)" style="margin-top: 0.5rem;" />
-      <div *ngIf="profileImageUrl" style="margin-top: 0.5rem; text-align: center;">
-        <img [src]="profileImageUrl" alt="Profile Preview" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid #4a90e2;" />
+    <!-- Signup Card -->
+    <div class="signup-card">
+      <!-- Signup Form -->
+      <form class="signup-form" (ngSubmit)="signup()">
+        <div class="input-group">
+          <div class="input-container">
+            <input 
+              type="email" 
+              [(ngModel)]="email" 
+              name="email"
+              placeholder="" 
+              class="form-input"
+              required>
+            <label class="form-label">Email Address</label>
+            <div class="input-icon">✉️</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-container">
+            <input 
+              type="text" 
+              [(ngModel)]="username" 
+              name="username"
+              placeholder="" 
+              class="form-input"
+              required>
+            <label class="form-label">User Name</label>
+            <div class="input-icon">👤</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-container">
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              [(ngModel)]="password" 
+              name="password"
+              placeholder="" 
+              class="form-input"
+              required>
+            <label class="form-label">Password</label>
+            <div class="input-icon">🔒</div>
+            <button 
+              type="button"
+              class="password-toggle"
+              (click)="showPassword = !showPassword">
+              {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-container">
+            <input 
+              type="tel" 
+              [(ngModel)]="phone" 
+              name="phone"
+              placeholder="" 
+              class="form-input"
+              required>
+            <label class="form-label">Phone Number</label>
+            <div class="input-icon">📱</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-container">
+            <input 
+              type="text" 
+              [(ngModel)]="address" 
+              name="address"
+              placeholder="" 
+              class="form-input"
+              required>
+            <label class="form-label">Address</label>
+            <div class="input-icon">🏠</div>
+          </div>
+        </div>
+
+        <!-- Profile Photo Section -->
+        <div class="profile-section">
+          <label class="profile-label">Profile Photo</label>
+          <div class="file-input-container">
+            <input 
+              type="file" 
+              accept="image/*" 
+              (change)="onProfileImageSelected($event)" 
+              class="file-input"
+              id="profilePhoto">
+            <label for="profilePhoto" class="file-input-label">
+              <span class="file-icon">📷</span>
+              Choose Photo
+            </label>
+          </div>
+          <div *ngIf="profileImageUrl" class="profile-preview">
+            <img [src]="profileImageUrl" alt="Profile Preview" class="preview-image" />
+          </div>
+        </div>
+
+        <button 
+          type="submit"
+          class="signup-btn"
+          [disabled]="imageUploading"
+          [class.loading]="imageUploading">
+          <span class="btn-text">
+            {{ imageUploading ? 'Creating Account...' : 'Create Account' }}
+          </span>
+          <div class="btn-loader" *ngIf="imageUploading"></div>
+        </button>
+      </form>
+
+      <!-- Footer Links -->
+      <div class="signup-footer">
+        <p class="login-text">
+          Already have an account? 
+          <a routerLink="/login" class="login-link">Sign In</a>
+        </p>
       </div>
     </div>
-
-    <label class="showpassword-label">
-      <input 
-        type="checkbox" 
-        class="showpassword-checkbox" 
-        (change)="showpassword()" 
-        [checked]="showPassword"
-      />
-      <span>{{ showPassword ? 'Hide Password' : 'Show Password' }}</span>
-    </label>
-
-    <button (click)="signup()" [disabled]="imageUploading">{{ imageUploading ? 'Uploading...' : 'Sign Up' }}</button>
-
-    <p class="login-text">
-      Already have an Account?
-      <span class="login-link" (click)="login()">Login</span>
-    </p>
   </div>
 </div>

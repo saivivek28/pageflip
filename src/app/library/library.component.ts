@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './library.component.html',
-  styleUrls: ['./library.component.css']
+  styleUrl: './library.component.css'
 })
 export class LibraryComponent implements OnInit {
   libraryBooks: any[] = [];
@@ -115,7 +115,7 @@ export class LibraryComponent implements OnInit {
 
     // Apply rating filter
     if (this.selectedRatings.length > 0) {
-      filtered = filtered.filter(book => this.selectedRatings.includes(book.rating || 5));
+      filtered = filtered.filter(book => this.selectedRatings.includes(Math.round(Number(book.rating) || 0)));
     }
 
     // Apply sorting
@@ -137,9 +137,9 @@ export class LibraryComponent implements OnInit {
       case 'author-desc':
         return books.sort((a, b) => b.author.localeCompare(a.author));
       case 'rating':
-        return books.sort((a, b) => (b.rating || 5) - (a.rating || 5));
+        return books.sort((a, b) => (Number(b.rating) || 0) - (Number(a.rating) || 0));
       case 'rating-desc':
-        return books.sort((a, b) => (a.rating || 5) - (b.rating || 5));
+        return books.sort((a, b) => (Number(a.rating) || 0) - (Number(b.rating) || 0));
       case 'date-added':
         return books.sort((a, b) => new Date(b.dateAdded || 0).getTime() - new Date(a.dateAdded || 0).getTime());
       default:
@@ -182,6 +182,15 @@ export class LibraryComponent implements OnInit {
     }
   }
 
+  // Allow user to rate a book 1..5, persist to local storage, and re-apply sorting/filters
+  rateBook(book: any, rating: number) {
+    const clamped = Math.max(1, Math.min(5, Math.round(rating)));
+    book.rating = clamped;
+    this.saveLibraryBooks();
+    this.applyFiltersAndSort();
+    this.showNotification(book, 'rated');
+  }
+
   loadMoreBooks() {
     this.isLoading = true;
     // Simulate loading delay
@@ -196,7 +205,8 @@ export class LibraryComponent implements OnInit {
     const messages: { [key: string]: string } = {
       'removed': `${book.title} removed from library`,
       'favorited': `${book.title} added to favorites`,
-      'unfavorited': `${book.title} removed from favorites`
+      'unfavorited': `${book.title} removed from favorites`,
+      'rated': `${book.title} rated ${book.rating}/5`
     };
 
     const message = messages[type] || 'Book updated';

@@ -7,7 +7,7 @@ import { NotificationService } from '../notification.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './floating-notification.component.html',
-  styleUrls: ['./floating-notification.component.css']
+  styleUrl: './floating-notification.component.css'
 })
 export class FloatingNotificationComponent implements OnInit {
   notifications: any[] = [];

@@ -21,7 +21,7 @@ import { Subscription } from 'rxjs';
     SearchPipe
   ],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit, OnDestroy {
   apiUrl = 'http://127.0.0.1:5000/books';
@@ -61,6 +61,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   userInput = '';
   isTyping = false;
   private chatSubscription: Subscription = new Subscription();
+  // Cache for per-session random ratings
+  private randomRatings: Map<string, number> = new Map();
 
   constructor(
     private http: HttpClient,
@@ -146,6 +148,23 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.maxSlides = Math.max(0, this.featuredBooks.length - 3);
   }
 
+  // Compute a display rating for a book. If the book has a numeric rating, use it.
+  // Otherwise, generate a per-session random rating (cached) so UI looks varied on each visit.
+  displayRating(book: any): number {
+    const r = Number(book?.rating);
+    if (!isNaN(r) && r > 0) return Math.max(0, Math.min(5, r));
+    const id = String(book?.bookId || book?.id || '');
+    if (!id) return 0;
+    if (this.randomRatings.has(id)) return this.randomRatings.get(id)!;
+    // Random between 3.0 and 5.0, rounded to 0.5 steps
+    const min = 3.0;
+    const max = 5.0;
+    const raw = min + Math.random() * (max - min);
+    const val = Math.round(raw * 2) / 2;
+    this.randomRatings.set(id, val);
+    return val;
+  }
+
   getRandomBooks(count: number, excludeIds: string[] = []): any[] {
     const availableBooks = this.books.filter((book: any) => !excludeIds.includes(book.bookId));
     const shuffled = [...availableBooks].sort(() => 0.5 - Math.random());
@@ -181,11 +200,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   scrollToBooks() {
-    const bookList = document.querySelector('.book-list');
-    if (bookList) {
-      bookList.scrollIntoView({ behavior: 'smooth' });
+    const booksSection = document.getElementById('books-section');
+    if (booksSection) {
+      booksSection.scrollIntoView({ behavior: 'smooth' });
     }
   }
+
+  // Removed goToAdminLogin method - admin access only via direct URL
 
   // Method to update filtered books based on current search and genre
   updateFilteredBooks() {

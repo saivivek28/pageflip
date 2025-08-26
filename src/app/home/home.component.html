@@ -4,7 +4,7 @@
 <div class="hero-section">
   <!-- <video class="hero-video" autoplay muted loop playsinline preload="auto">
     <source src="https://videos.pexels.com/video-files/9584768/9584768-uhd_4096_2160_25fps.mp4" type="video/mp4" />
-  </video>  -->
+  </video>  --> 
   <div class="hero-content">
     <h1 class="hero-title">Discover Your Next Great Read</h1>
     <p class="hero-subtitle">Explore thousands of books across all genres. Find your perfect story today.</p>
@@ -44,8 +44,10 @@
               <h4 class="featured-book-title">{{ book.title }}</h4>
               <p class="featured-book-author">by {{ book.author }}</p>
               <div class="featured-rating">
-                <span class="stars">★★★★★</span>
-                <span class="rating-text">5.0</span>
+                <span class="stars">
+                  <span *ngFor="let star of [1,2,3,4,5]" [class.filled]="star <= displayRating(book)" class="star">★</span>
+                </span>
+                <span class="rating-text">{{ displayRating(book) | number:'1.1-1' }}</span>
               </div>
             </div>
           </div>
@@ -84,7 +86,7 @@
   </button>
 </div>
 
-<div class="book-list">
+<div class="book-list" id="books-section">
   <div class="book-card"
     *ngFor="let book of pagedBooks"
     [routerLink]="['/book', book.bookId]">
@@ -103,7 +105,10 @@
       </div>
 
       <div class="rating">
-        ★★★★★
+        <span class="stars">
+          <span *ngFor="let star of [1,2,3,4,5]" [class.filled]="star <= displayRating(book)" class="star">★</span>
+        </span>
+        <span class="rating-text">{{ displayRating(book) | number:'1.1-1' }}</span>
       </div>
 
       <button class="add-to-cart-btn" >Know More..</button>

@@ -120,11 +120,16 @@
         <p class="book-genre"><strong>Genre:</strong> {{ book.genre }}</p>
         <div class="book-rating">
           <span class="stars">
-            <span *ngFor="let star of [1,2,3,4,5]" 
-                  [class.filled]="star <= (book.rating || 5)"
-                  class="star">★</span>
+            <button 
+              type="button"
+              *ngFor="let star of [1,2,3,4,5]"
+              class="star"
+              [class.filled]="star <= (book.rating || 0)"
+              [disabled]="submittingRatingFor === book.bookId"
+              (click)="rateBook(book, star)">★</button>
           </span>
-          <span class="rating-text">{{ book.rating || 5 }}/5</span>
+          <span class="rating-text">{{ (book.rating || 0) | number:'1.1-1' }}/5</span>
+          <span class="rating-count" *ngIf="book.totalRatings"> ({{ book.totalRatings }})</span>
         </div>
         <p class="book-date" *ngIf="book.dateAdded">
           <strong>Added:</strong> {{ book.dateAdded | date:'mediumDate' }}

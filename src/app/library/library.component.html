@@ -114,10 +114,12 @@
         <div class="book-rating">
           <span class="stars">
             <span *ngFor="let star of [1,2,3,4,5]" 
-                  [class.filled]="star <= (book.rating || 5)"
-                  class="star">★</span>
+                  [class.filled]="star <= (book.rating || 0)"
+                  class="star"
+                  (click)="rateBook(book, star)"
+                  title="Rate {{star}} star{{star>1?'s':''}}">★</span>
           </span>
-          <span class="rating-text">{{ book.rating || 5 }}/5</span>
+          <span class="rating-text">{{ book.rating || 0 }}/5</span>
         </div>
         <p class="book-date" *ngIf="book.dateAdded">
           <strong>Added:</strong> {{ book.dateAdded | date:'mediumDate' }}

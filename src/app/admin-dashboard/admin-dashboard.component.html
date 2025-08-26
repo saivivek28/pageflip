@@ -1,0 +1,195 @@
+<div class="admin-dashboard">
+  <!-- Header -->
+  <div class="admin-header">
+    <div class="header-content">
+      <h1>Admin Dashboard</h1>
+      <div class="header-actions">
+        <button class="home-btn" (click)="goToHome()">🏠 Home</button>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-section">
+    <div class="stats-header">
+      <h2>📊 Dashboard Overview</h2>
+      <button class="refresh-btn" (click)="refreshStats()" title="Refresh Stats" [disabled]="isLoadingStats">
+        <span class="refresh-icon" [class.spinning]="isLoadingStats">🔄</span>
+        {{ isLoadingStats ? 'Refreshing...' : 'Refresh' }}
+      </button>
+    </div>
+    
+    <!-- Primary Stats Row -->
+    <div class="stats-row primary-stats">
+      <div class="stats-card primary">
+        <div class="stat-icon users">👥</div>
+        <div class="stat-content">
+          <div class="stat-number">{{ stats.totalUsers || 0 }}</div>
+          <div class="stat-label">Total Users</div>
+          <div class="stat-trend" *ngIf="stats.recentUsers > 0">
+            <span class="trend-indicator positive">↗</span>
+            +{{ stats.recentUsers }} this month
+          </div>
+        </div>
+      </div>
+      
+      <div class="stats-card primary">
+        <div class="stat-icon books">📚</div>
+        <div class="stat-content">
+          <div class="stat-number">{{ stats.totalBooks || 0 }}</div>
+          <div class="stat-label">Total Books</div>
+          <div class="stat-description">Available in library</div>
+        </div>
+      </div>
+      
+      <div class="stats-card primary">
+        <div class="stat-icon admins">👨‍💼</div>
+        <div class="stat-content">
+          <div class="stat-number">{{ stats.totalAdmins || 0 }}</div>
+          <div class="stat-label">Total Admins</div>
+          <div class="stat-description">System administrators</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Secondary Stats Row -->
+    <div class="stats-row secondary-stats">
+      <div class="stats-card secondary">
+        <div class="stat-icon rating">⭐</div>
+        <div class="stat-content">
+          <div class="stat-number">{{ stats.averageRating || 0 }}</div>
+          <div class="stat-label">Average Rating</div>
+          <div class="stat-description">Across all books</div>
+        </div>
+      </div>
+      
+      <div class="stats-card secondary">
+        <div class="stat-icon activity">📈</div>
+        <div class="stat-content">
+          <div class="stat-number">{{ stats.recentUsers || 0 }}</div>
+          <div class="stat-label">New Users</div>
+          <div class="stat-description">Last 30 days</div>
+        </div>
+      </div>
+      
+      <div class="stats-card secondary last-updated">
+        <div class="stat-icon time">🕒</div>
+        <div class="stat-content">
+          <div class="stat-number">{{ getFormattedTime(stats.lastUpdated) }}</div>
+          <div class="stat-label">Last Updated</div>
+          <div class="stat-description">Data refresh time</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Books Management -->
+  <div class="books-section">
+    <div class="section-header">
+      <h2>Books Management</h2>
+      <button class="add-book-btn" (click)="showAddForm()" *ngIf="!showAddBookForm">
+        + Add New Book
+      </button>
+    </div>
+
+    <!-- Add/Edit Book Form -->
+    <div class="book-form-container" *ngIf="showAddBookForm">
+      <div class="book-form">
+        <h3>{{ editingBook ? 'Edit Book' : 'Add New Book' }}</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Title *</label>
+            <input type="text" [(ngModel)]="newBook.title" placeholder="Enter book title" required>
+          </div>
+          <div class="form-group">
+            <label>Author *</label>
+            <input type="text" [(ngModel)]="newBook.author" placeholder="Enter author name" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Genre</label>
+            <input type="text" [(ngModel)]="newBook.genre" placeholder="Enter genre">
+          </div>
+          <div class="form-group">
+            <label>Pages</label>
+            <input type="number" [(ngModel)]="newBook.pages" placeholder="Number of pages">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>ISBN</label>
+            <input type="text" [(ngModel)]="newBook.isbn" placeholder="Enter ISBN">
+          </div>
+          <div class="form-group">
+            <label>Published Date</label>
+            <input type="date" [(ngModel)]="newBook.publishedDate">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Cover Image URL</label>
+          <input type="url" [(ngModel)]="newBook.coverImage" placeholder="Enter cover image URL">
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea [(ngModel)]="newBook.description" placeholder="Enter book description" rows="4"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button class="cancel-btn" (click)="hideAddForm()">Cancel</button>
+          <button class="save-btn" (click)="editingBook ? updateBook() : addBook()" [disabled]="isLoading">
+            {{ isLoading ? 'Saving...' : (editingBook ? 'Update Book' : 'Add Book') }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Books Grid -->
+    <div class="books-grid" *ngIf="!isLoading">
+      <div class="book-card" *ngFor="let book of books">
+        <div class="book-cover">
+          <img [src]="book.coverImage || 'https://via.placeholder.com/150x200?text=No+Cover'" 
+               [alt]="book.title" 
+               onerror="this.src='https://via.placeholder.com/150x200?text=No+Cover'">
+        </div>
+        <div class="book-info">
+          <h4>{{ book.title }}</h4>
+          <p class="author">by {{ book.author }}</p>
+          <p class="genre" *ngIf="book.genre">{{ book.genre }}</p>
+          <p class="pages" *ngIf="book.pages">{{ book.pages }} pages</p>
+          <div class="rating" *ngIf="book.rating > 0">
+            <span class="stars">⭐ {{ book.rating }}/5</span>
+            <span class="ratings-count">({{ book.totalRatings }} ratings)</span>
+          </div>
+        </div>
+        <div class="book-actions">
+          <button class="edit-btn" (click)="editBook(book)">✏️ Edit</button>
+          <button class="delete-btn" (click)="deleteBook(book)">🗑️ Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading" *ngIf="isLoading">
+      <div class="spinner"></div>
+      <p>Loading...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoading && books.length === 0">
+      <div class="empty-icon">📚</div>
+      <h3>No books found</h3>
+      <p>Start by adding your first book to the library.</p>
+      <button class="add-first-book-btn" (click)="showAddForm()">Add First Book</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notifications -->
+<app-toast></app-toast>

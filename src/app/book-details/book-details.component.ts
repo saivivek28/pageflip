@@ -47,7 +47,7 @@ export class BookDetailsComponent {
   loadRecommended(allBooks: any[]) {
     this.recommendedBooks = allBooks.filter(
       (b) =>
-        b.bookId !== this.book.bookId &&
+        b._id !== this.book._id &&
         (b.genre === this.book.genre || b.author === this.book.author)
     );
   }

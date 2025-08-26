@@ -1,24 +1,99 @@
 <div class="login-wrapper">
-  <h1>Welcome Back to PageFlip</h1>
-  <p class="subtitle">Good to see you again!</p>
+  <!-- Background Animation -->
+  <div class="bg-animation">
+    <div class="floating-book book1">📚</div>
+    <div class="floating-book book2">📖</div>
+    <div class="floating-book book3">📕</div>
+    <div class="floating-book book4">📘</div>
+  </div>
 
-  <div class="login-container">
-    <!-- <input type="text" placeholder="User Name" [(ngModel)]="username" />| -->
-    <input type="email" placeholder="Enter email" [(ngModel)]="email"/>
-    <input [type]="showPassword ? 'text' : 'password' " placeholder="Enter your password" [(ngModel)]="password" />
-<label class="showpassword-label">
-  <input 
-    type="checkbox" 
-    class="showpassword-checkbox" 
-    (change)="showpassword()" 
-    [checked]="showPassword"
-  />
-  <span>{{ showPassword ? 'Hide Password' : 'Show Password' }}</span>
-</label>
-    <button (click)="signIn()">Login</button>
-    <p class="signup-text">
-      Don't have an account?
-      <span class="signup-link" (click)="signup()">Sign Up</span>
-    </p>
+  <!-- Main Content -->
+  <div class="login-content">
+    <!-- Logo/Brand Section -->
+    <div class="brand-section">
+      <div class="logo-container">
+        <div class="logo-icon">📚</div>
+        <h1 class="brand-name">PageFlip</h1>
+      </div>
+      <p class="brand-tagline">Your Digital Library Experience</p>
+    </div>
+    
+    <!-- Login Card -->
+    <div class="login-card">
+      <!-- Login Type Toggle -->
+      <div class="login-type-toggle">
+        <button 
+          class="toggle-btn" 
+          [class.active]="!isAdminLogin"
+          (click)="setLoginType(false)">
+          <span class="toggle-icon">👤</span>
+          User
+        </button>
+        <button 
+          class="toggle-btn" 
+          [class.active]="isAdminLogin"
+          (click)="setLoginType(true)">
+          <span class="toggle-icon">👨‍💼</span>
+          Admin
+        </button>
+      </div>
+
+      <!-- Login Form -->
+      <form class="login-form" (ngSubmit)="signIn()">
+        <div class="input-group">
+          <div class="input-container">
+            <input 
+              type="email" 
+              [(ngModel)]="email" 
+              name="email"
+              placeholder=" " 
+              class="form-input"
+              required>
+            <label class="form-label">Email Address</label>
+            <div class="input-icon">✉️</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-container">
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              [(ngModel)]="password" 
+              name="password"
+              placeholder=" " 
+              class="form-input"
+              required>
+            <label class="form-label">Password</label>
+            <div class="input-icon">🔒</div>
+            <button 
+              type="button"
+              class="password-toggle"
+              (click)="showPassword = !showPassword">
+              {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+            </button>
+          </div>
+        </div>
+
+
+        <button 
+          type="submit"
+          class="login-btn"
+          [disabled]="isLoading"
+          [class.loading]="isLoading">
+          <span class="btn-text">
+            {{ isLoading ? 'Signing In...' : (isAdminLogin ? 'Login as Admin' : 'Sign In') }}
+          </span>
+          <div class="btn-loader" *ngIf="isLoading"></div>
+        </button>
+      </form>
+
+      <!-- Footer Links -->
+      <div class="login-footer">
+        <p class="signup-text">
+          New to PageFlip? 
+          <a routerLink="/signup" class="signup-link">Create Account</a>
+        </p>
+      </div>
+    </div>
   </div>
 </div>

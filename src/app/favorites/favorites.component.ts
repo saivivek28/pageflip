@@ -1,18 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, HttpClientModule],
   templateUrl: './favorites.component.html',
-  styleUrls: ['./favorites.component.css']
+  styleUrl: './favorites.component.css'
 })
 export class FavoritesComponent implements OnInit {
   favoriteBooks: any[] = [];
   filteredFavoriteBooks: any[] = [];
+  submittingRatingFor: string | null = null;
   
   // View and display
   viewMode: 'grid' | 'list' = 'grid';
@@ -29,7 +31,7 @@ export class FavoritesComponent implements OnInit {
   // Search
   searchQuery: string = '';
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.loadFavoriteBooks();
@@ -108,7 +110,7 @@ export class FavoritesComponent implements OnInit {
 
     // Apply rating filter
     if (this.selectedRatings.length > 0) {
-      filtered = filtered.filter(book => this.selectedRatings.includes(book.rating || 5));
+      filtered = filtered.filter(book => this.selectedRatings.includes(Math.round(book.rating || 0)));
     }
 
     // Apply sorting
@@ -128,9 +130,9 @@ export class FavoritesComponent implements OnInit {
       case 'author-desc':
         return books.sort((a, b) => b.author.localeCompare(a.author));
       case 'rating':
-        return books.sort((a, b) => (b.rating || 5) - (a.rating || 5));
+        return books.sort((a, b) => (b.rating || 0) - (a.rating || 0));
       case 'rating-desc':
-        return books.sort((a, b) => (a.rating || 5) - (b.rating || 5));
+        return books.sort((a, b) => (a.rating || 0) - (b.rating || 0));
       default:
         return books;
     }
@@ -180,5 +182,43 @@ export class FavoritesComponent implements OnInit {
     this.favoriteBooks = this.favoriteBooks.filter(b => b.bookId !== book.bookId);
     // Optionally, re-apply filters and sort
     this.applyFiltersAndSort();
+  }
+
+  rateBook(book: any, rating: number) {
+    if (!book || !book.bookId || this.submittingRatingFor) return;
+    this.submittingRatingFor = book.bookId;
+    const url = `http://127.0.0.1:5000/books/${book.bookId}/rate`;
+    this.http.post<any>(url, { rating }).subscribe({
+      next: (updated) => {
+        // Update the book's rating locally (both arrays)
+        const applyUpdate = (b: any) => {
+          if (b.bookId === book.bookId) {
+            b.rating = updated?.rating ?? b.rating;
+            b.totalRatings = updated?.totalRatings ?? b.totalRatings;
+          }
+        };
+        this.favoriteBooks.forEach(applyUpdate);
+        this.filteredFavoriteBooks.forEach(applyUpdate);
+
+        // Persist to user's library in localStorage so filters reflect new rating
+        const userId = localStorage.getItem('id');
+        if (userId) {
+          const key = `libraryBooks_${userId}`;
+          const stored = localStorage.getItem(key);
+          if (stored) {
+            const allBooks = JSON.parse(stored);
+            const updatedBooks = allBooks.map((b: any) => (
+              b.bookId === book.bookId ? { ...b, rating: updated?.rating ?? rating, totalRatings: updated?.totalRatings ?? b.totalRatings } : b
+            ));
+            localStorage.setItem(key, JSON.stringify(updatedBooks));
+          }
+        }
+
+        this.submittingRatingFor = null;
+      },
+      error: () => {
+        this.submittingRatingFor = null;
+      }
+    });
   }
 }

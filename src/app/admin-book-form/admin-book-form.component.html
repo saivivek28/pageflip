@@ -1,0 +1,213 @@
+<div class="admin-book-form-container">
+  <div class="form-header">
+    <h1>{{ isEditMode ? 'Edit Book' : 'Add New Book' }}</h1>
+    <button class="back-btn" (click)="cancel()">
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </button>
+  </div>
+
+  <div class="form-card" *ngIf="!isLoading">
+    <form (ngSubmit)="onSubmit()" #bookForm="ngForm">
+      <div class="form-grid">
+        <!-- Title -->
+        <div class="form-group">
+          <label for="title">Title *</label>
+          <input 
+            type="text" 
+            id="title" 
+            name="title"
+            [(ngModel)]="book.title" 
+            required 
+            class="form-control"
+            placeholder="Enter book title"
+          />
+        </div>
+
+        <!-- Author -->
+        <div class="form-group">
+          <label for="author">Author *</label>
+          <input 
+            type="text" 
+            id="author" 
+            name="author"
+            [(ngModel)]="book.author" 
+            required 
+            class="form-control"
+            placeholder="Enter author name"
+          />
+        </div>
+
+        <!-- Genre -->
+        <div class="form-group">
+          <label for="genre">Genre</label>
+          <select 
+            id="genre" 
+            name="genre"
+            [(ngModel)]="book.genre" 
+            class="form-control"
+          >
+            <option value="">Select Genre</option>
+            <option value="Fiction">Fiction</option>
+            <option value="Non-Fiction">Non-Fiction</option>
+            <option value="Mystery">Mystery</option>
+            <option value="Romance">Romance</option>
+            <option value="Science Fiction">Science Fiction</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="Biography">Biography</option>
+            <option value="History">History</option>
+            <option value="Self-Help">Self-Help</option>
+            <option value="Business">Business</option>
+            <option value="Technology">Technology</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <!-- Pages -->
+        <!-- <div class="form-group">
+          <label for="pages">Pages</label>
+          <input 
+            type="number" 
+            id="pages" 
+            name="pages"
+            [(ngModel)]="book.pages" 
+            class="form-control"
+            placeholder="Number of pages"
+            min="1"
+          />
+        </div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+        <!-- Published Date -->
+        <div class="form-group">
+          <label for="publishedDate">Published Date</label>
+          <input 
+            type="date" 
+            id="publishedDate" 
+            name="publishedDate"
+            [(ngModel)]="book.publishedDate" 
+            class="form-control"
+          />
+        </div>
+
+        <!-- ISBN -->
+        <div class="form-group">
+          <label for="isbn">ISBN</label>
+          <input 
+            type="text" 
+            id="isbn" 
+            name="isbn"
+            [(ngModel)]="book.isbn" 
+            class="form-control"
+            placeholder="ISBN number"
+          />
+        </div>
+      </div>
+
+      <!-- Cover Image URL -->
+      <div class="form-group full-width">
+        <label for="coverImage">Cover Image URL</label>
+        <input 
+          type="url" 
+          id="coverImage" 
+          name="coverImage"
+          [(ngModel)]="book.coverImage" 
+          class="form-control"
+          placeholder="https://example.com/book-cover.jpg"
+        />
+        <div class="image-preview" *ngIf="book.coverImage">
+          <img [src]="book.coverImage" alt="Cover Preview" (error)="onImageError($event)">
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group full-width">
+        <label for="description">Description</label>
+        <textarea 
+          id="description" 
+          name="description"
+          [(ngModel)]="book.description" 
+          class="form-control"
+          rows="4"
+          placeholder="Enter book description..."
+        ></textarea>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button 
+          type="submit" 
+          class="submit-btn"
+          [disabled]="isLoading || !bookForm.valid"
+        >
+          <i class="fas fa-spinner fa-spin" *ngIf="isLoading"></i>
+          <i class="fas fa-save" *ngIf="!isLoading"></i>
+          {{ isLoading ? 'Saving...' : (isEditMode ? 'Update Book' : 'Add Book') }}
+        </button>
+        
+        <button 
+          type="button" 
+          class="cancel-btn"
+          (click)="cancel()"
+          [disabled]="isLoading"
+        >
+          <i class="fas fa-times"></i>
+          Cancel
+        </button>
+        
+        <button 
+          type="button" 
+          class="reset-btn"
+          (click)="resetForm()"
+          [disabled]="isLoading"
+          *ngIf="!isEditMode"
+        >
+          <i class="fas fa-undo"></i>
+          Reset
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading && isEditMode">
+    <div class="loading-spinner">
+      <i class="fas fa-spinner fa-spin"></i>
+      <p>Loading book details...</p>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notifications -->
+<app-toast></app-toast>
