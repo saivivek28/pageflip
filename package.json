@@ -5,8 +5,10 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:ssr": "ng build --configuration=production && ng run PageFlip:server:production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "serve:ssr": "node dist/page-flip/server/server.mjs",
     "serve:ssr:PageFlip": "node dist/page-flip/server/server.mjs"
   },
   "private": true,

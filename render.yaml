@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: pageflip
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: node dist/page-flip/server/server.mjs
+    envVars:
+      - key: NODE_VERSION
+        value: 18.x
+    plan: free
+    autoDeploy: true
