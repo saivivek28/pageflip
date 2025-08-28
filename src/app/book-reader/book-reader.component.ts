@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild } fro
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-book-reader',
@@ -38,7 +40,8 @@ export class BookReaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
@@ -53,20 +56,53 @@ export class BookReaderComponent implements OnInit, OnDestroy {
 
   loadBook() {
     const bookId = this.route.snapshot.paramMap.get('id');
-    // In a real app, you would fetch the book from an API
-    this.book = {
-      id: bookId,
-      title: 'Sample Book',
-      author: 'Sample Author',
-      content: 'This is the content of the book...'
-    };
+    if (!bookId) {
+      this.router.navigate(['/home']);
+      return;
+    }
+
+    this.http.get<any>(`${environment.apiUrl}/books/${bookId}`).subscribe({
+      next: (book) => {
+        this.book = book;
+        // If the book has content, use it to generate pages
+        if (book.content) {
+          this.generatePagesFromContent(book.content);
+        } else {
+          this.generatePages();
+        }
+      },
+      error: (error) => {
+        console.error('Error loading book:', error);
+        this.router.navigate(['/home']);
+      }
+    });
   }
 
   generatePages() {
-    // Generate sample pages - in a real app, this would come from the book data
+    // Fallback method if no content is available
+    this.pages = [
+      'No content available for this book.',
+      'Please check back later or contact support if you believe this is an error.'
+    ];
+    this.totalPages = this.pages.length;
+  }
+
+  generatePagesFromContent(content: string) {
+    // Split content into pages (simple implementation)
+    const wordsPerPage = 250; // Adjust based on your needs
+    const words = content.split(/\s+/);
     this.pages = [];
-    for (let i = 1; i <= this.totalPages; i++) {
-      this.pages.push(`Page ${i} content goes here. This is a sample page with some text content that would normally come from the actual book data.`);
+    
+    for (let i = 0; i < words.length; i += wordsPerPage) {
+      const pageContent = words.slice(i, i + wordsPerPage).join(' ');
+      this.pages.push(pageContent);
+    }
+    
+    this.totalPages = Math.max(1, this.pages.length);
+    
+    // If no pages were created, add a default message
+    if (this.pages.length === 0) {
+      this.generatePages();
     }
   }
 

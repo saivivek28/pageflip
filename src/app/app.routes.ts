@@ -7,7 +7,6 @@ import { FavoritesComponent } from './favorites/favorites.component';
 import { ProfileDetailsComponent } from './profile-details/profile-details.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { BookDetailsComponent } from './book-details/book-details.component';
-import { BookReaderComponent } from './book-reader/book-reader.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { AdminBookFormComponent } from './admin-book-form/admin-book-form.component';
@@ -24,7 +23,6 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileDetailsComponent, canActivate: [AuthGuard] },
   { path: 'edit-profile', component: EditProfileComponent, canActivate: [AuthGuard] },
   { path: 'book/:id', component: BookDetailsComponent, canActivate: [AuthGuard] },
-  { path: 'book-reader/:id', component: BookReaderComponent, canActivate: [AuthGuard] },
   { path: 'admin/login', component: AdminLoginComponent },
   { path: 'admin/dashboard', component: AdminDashboardComponent, canActivate: [AdminGuard] },
   { path: 'admin/book/add', component: AdminBookFormComponent, canActivate: [AdminGuard] },

@@ -13,6 +13,7 @@ interface Book {
   description: string;
   genre: string;
   coverImage: string;
+  pdfUrl?: string;
   pages: number;
   publishedDate: string;
   isbn: string;
@@ -34,6 +35,7 @@ export class AdminBookFormComponent implements OnInit {
     description: '',
     genre: '',
     coverImage: '',
+    pdfUrl: '',
     pages: 0,
     publishedDate: '',
     isbn: '',

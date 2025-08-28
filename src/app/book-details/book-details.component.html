@@ -15,14 +15,24 @@
       <p>
         <strong>Stock:</strong> {{ book.stock }} | <strong>Format:</strong> {{ book.format }}
       </p>
-      <button class="action-button buy-button" (click) = "addToLibrary(book)">Add to Library</button>
+      <div class="button-group">
+        <button class="action-button buy-button" (click)="addToLibrary(book)">Add to Library</button>
+        <button class="action-button read-button" (click)="readBook(book)" [disabled]="!book.pdfUrl">
+          {{ book.pdfUrl ? 'Read' : 'Not Available' }}
+        </button>
+      </div>
     </div>
     <div *ngIf="book.type === 'ebook'" class="action-section">
       <p>
         <strong>Format:</strong> {{ book.format }} |
         <!-- <a [href]="book.fileUrl" download class="download-link">Download</a> -->
       </p>
-      <button class="action-button rent-button" (click) = "addToLibrary(book)">Add to Library</button>
+      <div class="button-group">
+        <button class="action-button rent-button" (click)="addToLibrary(book)">Add to Library</button>
+        <button class="action-button read-button" (click)="readBook(book)" [disabled]="!book.pdfUrl">
+          {{ book.pdfUrl ? 'Read' : 'Not Available' }}
+        </button>
+      </div>
     </div>
     <h2>About this Book</h2>
   <p>{{book.description}}</p>

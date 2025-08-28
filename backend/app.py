@@ -43,6 +43,7 @@ def serialize_book(book: dict) -> dict:
         "description": book.get("description"),
         "genre": book.get("genre"),
         "coverImage": book.get("coverImage"),
+        "pdfUrl": book.get("pdfUrl", ""),
         "pages": book.get("pages", 0),
         "publishedDate": book.get("publishedDate"),
         "isbn": book.get("isbn"),
@@ -287,11 +288,17 @@ def add_book():
         'description': data.get('description', ''),
         'genre': data.get('genre', ''),
         'coverImage': data.get('coverImage', ''),
+        'pdfUrl': data.get('pdfUrl', ''),
         'pages': data.get('pages', 0),
         'publishedDate': data.get('publishedDate', ''),
         'isbn': data.get('isbn', ''),
         'rating': 0,
-        'totalRatings': 0
+        'totalRatings': 0,
+        'type': data.get('type', 'ebook'),
+        'priceBuy': data.get('priceBuy', 299),
+        'priceRent': data.get('priceRent', 99),
+        'stock': data.get('stock', 10),
+        'format': data.get('format', 'PDF')
     }
     
     result = books_collection.insert_one(book_data)
@@ -311,7 +318,7 @@ def update_book(id):
     except: return jsonify({'error':'Invalid book id'}), 400
     
     data = request.get_json() or {}
-    allowed_fields = ['title', 'author', 'description', 'genre', 'coverImage', 'pages', 'publishedDate', 'isbn']
+    allowed_fields = ['title', 'author', 'description', 'genre', 'coverImage', 'pdfUrl', 'pages', 'publishedDate', 'isbn', 'type', 'priceBuy', 'priceRent', 'stock', 'format']
     update_doc = {k: data[k] for k in allowed_fields if k in data}
     
     if update_doc:

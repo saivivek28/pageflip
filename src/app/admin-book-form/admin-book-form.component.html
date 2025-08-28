@@ -151,6 +151,20 @@
         </div>
       </div>
 
+      <!-- PDF URL -->
+      <div class="form-group full-width">
+        <label for="pdfUrl">PDF URL</label>
+        <input 
+          type="url" 
+          id="pdfUrl" 
+          name="pdfUrl"
+          [(ngModel)]="book.pdfUrl" 
+          class="form-control"
+          placeholder="https://example.com/book.pdf"
+        />
+        <small class="form-text text-muted">Provide a direct link to the PDF file for reading online</small>
+      </div>
+
       <!-- Description -->
       <div class="form-group full-width">
         <label for="description">Description</label>
