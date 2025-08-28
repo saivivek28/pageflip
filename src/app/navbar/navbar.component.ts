@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
+import { environment } from '../../environments/environment';
 import { ThemeService } from '../theme.service';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
@@ -28,7 +29,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     // ✅ Debounce search to wait until user pauses typing
     this.searchSubject
-      .pipe(debounceTime(350), distinctUntilChanged()) // wait 300ms & ignore same values
+      .pipe(debounceTime(1000), distinctUntilChanged()) // wait 300ms & ignore same values
       .subscribe(query => {
         this.search.emit(query);
         // Auto navigate when typing
@@ -40,7 +41,7 @@ export class NavbarComponent implements OnInit {
       try { const u = JSON.parse(localStorage.getItem('userData') || '{}'); return u?._id || u?.id || null; } catch { return null; }
     })();
     if (userId) {
-      this.http.get(`http://127.0.0.1:5000/user/${userId}`).subscribe({
+      this.http.get(`${environment.apiUrl}/user/${userId}`).subscribe({
         next: (res) => {
           const localUserData = (() => {
             try { return JSON.parse(localStorage.getItem('userData') || '{}'); } catch { return {}; }

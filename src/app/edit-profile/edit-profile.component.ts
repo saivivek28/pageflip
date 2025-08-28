@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { ToastService } from '../services/toast.service';
 import { ToastComponent } from '../components/toast/toast.component';
 
@@ -72,7 +73,7 @@ export class EditProfileComponent implements OnInit {
     if (this.userData.address) localStorage.setItem('address', this.userData.address);
 
     // Update via API
-    this.http.put(`http://127.0.0.1:5000/user/${userId}`, this.userData).subscribe({
+    this.http.put(`${environment.apiUrl}/user/${userId}`, this.userData).subscribe({
       next: (res: any) => {
         console.log('Profile updated successfully via API', res);
         this.toastService.success('Success!', 'Profile updated successfully');
@@ -173,7 +174,7 @@ export class EditProfileComponent implements OnInit {
     const formData = new FormData();
     formData.append('image', this.selectedImageFile);
     
-    this.http.post(`http://127.0.0.1:5000/user/${userId}/profile-image`, formData).subscribe({
+    this.http.post(`${environment.apiUrl}/user/${userId}/profile-image`, formData).subscribe({
       next: (response: any) => {
         const imageUrl = response.url;
         this.userData.profileImageUrl = imageUrl;
@@ -195,7 +196,7 @@ export class EditProfileComponent implements OnInit {
     
     this.imageUploading = true;
     
-    this.http.delete(`http://127.0.0.1:5000/user/${userId}/profile-image`).subscribe({
+    this.http.delete(`${environment.apiUrl}/user/${userId}/profile-image`).subscribe({
       next: () => {
         this.selectedImageFile = null;
         this.previewImageUrl = null;

@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterModule, RouterLink, ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { NavbarComponent } from '../navbar/navbar.component';
-import { SearchPipe } from '../search.pipe';
 import { ChatbotService, ChatMessage } from '../chatbot.service';
 import { Subscription } from 'rxjs';
 
@@ -17,14 +16,13 @@ import { Subscription } from 'rxjs';
     FormsModule, 
     HttpClientModule,
     RouterLink,
-    NavbarComponent,
-    SearchPipe
+    NavbarComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  apiUrl = 'http://127.0.0.1:5000/books';
+  apiUrl = `${environment.apiUrl}/books`;
   books: any = [];
   filteredBooks: any = [];
 
@@ -74,7 +72,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getBooks();
     this.initializeChatbot();
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params: any) => {
       const q = params['q'];
       const scroll = params['scroll'];
       if (typeof q === 'string') {

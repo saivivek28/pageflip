@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-favorites',
@@ -187,7 +188,7 @@ export class FavoritesComponent implements OnInit {
   rateBook(book: any, rating: number) {
     if (!book || !book.bookId || this.submittingRatingFor) return;
     this.submittingRatingFor = book.bookId;
-    const url = `http://127.0.0.1:5000/books/${book.bookId}/rate`;
+    const url = `${environment.apiUrl}/books/${book.bookId}/rate`;
     this.http.post<any>(url, { rating }).subscribe({
       next: (updated) => {
         // Update the book's rating locally (both arrays)

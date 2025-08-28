@@ -4,13 +4,14 @@ import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { filter, Subscription } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-profile-details',
   standalone: true,
-  imports:[FormsModule, CommonModule, RouterLink, HttpClientModule],
+  imports: [FormsModule, CommonModule, RouterLink, HttpClientModule],
   templateUrl: './profile-details.component.html',
-  styleUrl: './profile-details.component.css'
+  styleUrls: ['./profile-details.component.css']
 })
 export class ProfileDetailsComponent implements OnInit, OnDestroy {
   userData: any;
@@ -69,7 +70,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
     }
   
     // Fetch fresh data
-    this.http.get(`http://127.0.0.1:5000/user/${userId}`).subscribe({
+    this.http.get(`${environment.apiUrl}/user/${userId}`).subscribe({
       next: (res: any) => {
         this.userData = res;
         // make sure userData also contains `id` or `_id` for later use

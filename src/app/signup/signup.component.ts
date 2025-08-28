@@ -1,19 +1,21 @@
-import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
   imports: [RouterModule, FormsModule, CommonModule, HttpClientModule],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.css'
+  styleUrls: ['./signup.component.css']
 })
 export class SignupComponent {
-  signupURL = 'http://localhost:5000/register';
+  apiUrl = environment.apiUrl;
+  signupURL = `${this.apiUrl}/register`;
 
   email: string = '';
   username: string = '';
@@ -51,7 +53,7 @@ export class SignupComponent {
         this.toastr.success(res?.message || 'User registered successfully');
 
         // Step 2: Log in to obtain token and user id
-        this.http.post<any>('http://127.0.0.1:5000/login', {
+        this.http.post<any>(`${this.apiUrl}/login`, {
           email: this.email.trim(),
           password: this.password.trim()
         }).subscribe({
@@ -71,7 +73,7 @@ export class SignupComponent {
 
             // Prefetch user data for immediate availability in profile
             if (userId) {
-              this.http.get<any>(`http://127.0.0.1:5000/user/${userId}`).subscribe({
+              this.http.get<any>(`${this.apiUrl}/user/${userId}`).subscribe({
                 next: (userRes) => {
                   localStorage.setItem('userData', JSON.stringify(userRes));
                 },
@@ -91,7 +93,7 @@ export class SignupComponent {
               const formData = new FormData();
               formData.append('image', this.profileImageFile);
               this.imageUploading = true;
-              this.http.post<any>(`http://127.0.0.1:5000/user/${userId}/profile-image`, formData).subscribe({
+              this.http.post<any>(`${this.apiUrl}/user/${userId}/profile-image`, formData).subscribe({
                 next: (uploadRes) => {
                   this.imageUploading = false;
                   // Update cached userData with new image url

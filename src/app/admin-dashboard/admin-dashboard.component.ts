@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 import { ToastService } from '../services/toast.service';
 import { ToastComponent } from '../components/toast/toast.component';
 
@@ -32,7 +33,7 @@ interface AdminStats {
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, HttpClientModule, ToastComponent],
+  imports: [CommonModule, FormsModule, HttpClientModule, ToastComponent],
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css']
 })
@@ -92,7 +93,7 @@ export class AdminDashboardComponent implements OnInit {
 
   loadBooks() {
     this.isLoading = true;
-    this.http.get<Book[]>('http://127.0.0.1:5000/books').subscribe({
+    this.http.get<Book[]>(`${environment.apiUrl}/books`).subscribe({
       next: (books) => {
         this.books = books;
         this.isLoading = false;
@@ -112,7 +113,7 @@ export class AdminDashboardComponent implements OnInit {
     console.log('Loading stats with token:', token ? 'Token exists' : 'No token');
     console.log('User role:', role);
     
-    this.http.get<AdminStats>('http://127.0.0.1:5000/admin/stats', {
+    this.http.get<AdminStats>(`${environment.apiUrl}/admin/stats`, {
       headers: this.getAuthHeaders()
     }).subscribe({
       next: (stats) => {
@@ -195,7 +196,7 @@ export class AdminDashboardComponent implements OnInit {
     console.log('Adding book:', this.newBook);
     console.log('Auth headers:', this.getAuthHeaders());
     
-    this.http.post<Book>('http://127.0.0.1:5000/admin/books', this.newBook, {
+    this.http.post<Book>(`${environment.apiUrl}/admin/books`, this.newBook, {
       headers: this.getAuthHeaders()
     }).subscribe({
       next: (book) => {
@@ -227,7 +228,7 @@ export class AdminDashboardComponent implements OnInit {
     }
 
     this.isLoading = true;
-    this.http.put<Book>(`http://127.0.0.1:5000/admin/books/${this.editingBook._id}`, this.newBook, {
+    this.http.put<Book>(`${environment.apiUrl}/admin/books/${this.editingBook._id}`, this.newBook, {
       headers: this.getAuthHeaders()
     }).subscribe({
       next: (book) => {
@@ -254,7 +255,7 @@ export class AdminDashboardComponent implements OnInit {
     }
 
     this.isLoading = true;
-    this.http.delete(`http://127.0.0.1:5000/admin/books/${book._id}`, {
+    this.http.delete(`${environment.apiUrl}/admin/books/${book._id}`, {
       headers: this.getAuthHeaders()
     }).subscribe({
       next: () => {

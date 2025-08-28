@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { NotificationService } from '../notification.service';
 
@@ -31,7 +31,7 @@ export class BookDetailsComponent {
     const id = this.route.snapshot.paramMap.get('id');
     console.log('Loading book with ID:', id);
     
-    this.http.get<any[]>('http://127.0.0.1:5000/books').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/books`).subscribe({
       next: (books) => {
         console.log('All books received:', books);
         
