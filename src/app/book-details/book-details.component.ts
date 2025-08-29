@@ -24,6 +24,9 @@ export class BookDetailsComponent {
     private toastr: ToastrService,
     private notificationService: NotificationService
   ) {
+    
+  }
+  ngOnInit(){
     this.loadBook();
   }
 
