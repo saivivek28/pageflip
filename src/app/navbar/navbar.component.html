@@ -1,44 +1,61 @@
 <nav class="navbar">
-  <div class="nav-left">
-    <h1 class="app-name" [routerLink]="['/home']">PageFlip</h1>
-  </div>
-
-  <div class="nav-middle">
-    <div class="search-container" title="Search by book title or author name">
-      <input
-        type="text"
-        placeholder="Search by book title or author..."
-        [(ngModel)]="searchQuery"
-        (input)="onSearchChange()"
-        (keyup.enter)="onSearchEnter()"
-        class="search-input"
-      />
-      <div class="search-icon">🔍</div>
+  <div class="nav-header">
+    <div class="nav-left">
+      <h1 class="app-name" [routerLink]="['/home']">PageFlip</h1>
     </div>
+    
+    <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" aria-label="Toggle menu">
+      <span class="hamburger"></span>
+    </button>
   </div>
 
-  <div class="nav-right">
-    <button class="library-btn" [routerLink]="['/library']">My Library</button>
-    
-    <button class="favorites-btn" [routerLink]="['/favorites']" title="My Favorites">
-      <span class="favorites-icon">❤️</span>
-      <span class="favorites-text">Favorites</span>
-    </button>
-    
-    <button class="theme-toggle-btn" (click)="toggleTheme()" [title]="theme.isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
-      <span class="theme-icon" [class]="theme.isDarkMode ? 'moon-icon' : 'sun-icon'">
-        {{ theme.isDarkMode ? '🌙' : '☀️' }}
-      </span>
-    </button>
-    
-    <div class="profile-section">
-      <img 
-        [src]="profileImageUrl" 
-        [routerLink]="['/profile']" 
-        alt="Profile" 
-        class="profile-icon" 
-      />
-      <button class="logout-btn" (click)="logout()">Logout</button>
+  <div class="nav-content" [class.active]="isMobileMenuOpen">
+    <div class="nav-middle">
+      <div class="search-container" title="Search by book title or author name">
+        <input
+          type="text"
+          placeholder="Search books or authors..."
+          [(ngModel)]="searchQuery"
+          (input)="onSearchChange()"
+          (keyup.enter)="onSearchEnter()"
+          class="search-input"
+        />
+        <div class="search-icon">🔍</div>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <button class="nav-btn library-btn" [routerLink]="['/library']" (click)="closeMobileMenu()">
+        <span class="nav-icon">📚</span>
+        <span class="nav-text">My Library</span>
+      </button>
+      
+      <button class="nav-btn favorites-btn" [routerLink]="['/favorites']" (click)="closeMobileMenu()" title="My Favorites">
+        <span class="nav-icon">❤️</span>
+        <span class="nav-text">Favorites</span>
+      </button>
+      
+      <button class="nav-btn theme-toggle-btn" (click)="toggleTheme(); closeMobileMenu()" [title]="theme.isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+        <span class="nav-icon">
+          {{ theme.isDarkMode ? '🌙' : '☀️' }}
+        </span>
+        <span class="nav-text">{{ theme.isDarkMode ? 'Dark Mode' : 'Light Mode' }}</span>
+      </button>
+      
+      <div class="profile-section">
+        <button class="nav-btn profile-btn" [routerLink]="['/profile']" (click)="closeMobileMenu()">
+          <img 
+            [src]="profileImageUrl" 
+            alt="Profile" 
+            class="profile-icon" 
+          />
+          <span class="nav-text">Profile</span>
+        </button>
+        <button class="nav-btn logout-btn" (click)="logout(); closeMobileMenu()">
+          <span class="nav-icon">🚪</span>
+          <span class="nav-text">Logout</span>
+        </button>
+      </div>
     </div>
   </div>
 </nav>

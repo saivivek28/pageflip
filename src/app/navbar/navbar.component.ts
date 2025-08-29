@@ -1,6 +1,6 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { environment } from '../../environments/environment';
@@ -14,26 +14,51 @@ import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   searchQuery: string = '';
   filterOption: string = '';
   userData: any;
   showProfile: boolean = false;
+  isMobileMenuOpen = false;
+  isMobileView = false;
 
   @Output() search = new EventEmitter<string>();
 
   private searchSubject = new Subject<string>(); // 🔥 RxJS Subject
+  private resizeObserver: ResizeObserver | null = null;
 
-  constructor(private router: Router, private http: HttpClient, public theme: ThemeService) {}
+  constructor(
+    private router: Router, 
+    private http: HttpClient, 
+    public theme: ThemeService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.checkScreenSize();
+  }
 
   ngOnInit() {
+    // Initialize resize observer for responsive behavior
+    if (isPlatformBrowser(this.platformId)) {
+      this.setupResizeObserver();
+      window.addEventListener('resize', this.checkScreenSize.bind(this));
+      this.checkScreenSize();
+    }
+
+    // Close mobile menu on route change
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.closeMobileMenu();
+      }
+    });
+
     // ✅ Debounce search to wait until user pauses typing
     this.searchSubject
-      .pipe(debounceTime(1000), distinctUntilChanged()) // wait 300ms & ignore same values
+      .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe(query => {
         this.search.emit(query);
-        // Auto navigate when typing
-        this.router.navigate(['/home'], { queryParams: { q: query || '', scroll: '1' } });
+        if (this.isMobileView) {
+          this.router.navigate(['/home'], { queryParams: { q: query || '', scroll: '1' } });
+        }
       });
 
     // Fetch user details
@@ -79,6 +104,47 @@ export class NavbarComponent implements OnInit {
   logout() {
     this.router.navigate(['/login']);
     console.log("User logged out");
+  }
+
+  ngOnDestroy() {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+    if (isPlatformBrowser(this.platformId)) {
+      window.removeEventListener('resize', this.checkScreenSize.bind(this));
+    }
+  }
+
+  private setupResizeObserver() {
+    if (isPlatformBrowser(this.platformId) && 'ResizeObserver' in window) {
+      this.resizeObserver = new ResizeObserver(entries => {
+        this.checkScreenSize();
+      });
+      this.resizeObserver.observe(document.body);
+    }
+  }
+
+  private checkScreenSize() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.isMobileView = window.innerWidth < 992; // Bootstrap's lg breakpoint
+      if (!this.isMobileView) {
+        this.isMobileMenuOpen = false;
+      }
+    }
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    if (this.isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+
+  closeMobileMenu() {
+    this.isMobileMenuOpen = false;
+    document.body.style.overflow = '';
   }
 
   get profileImageUrl(): string {
