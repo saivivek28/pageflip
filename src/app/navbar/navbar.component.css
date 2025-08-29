@@ -417,6 +417,8 @@
   .nav-btn .nav-icon {
     font-size: 1.1rem;
   }
+  
+  .nav-left {
     gap: 1rem;
     padding: 1rem;
   }
@@ -522,6 +524,4 @@
     height: 32px;
   }
 }
-
-
-
+}
