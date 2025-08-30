@@ -80,9 +80,11 @@
   margin-bottom: 0.5rem;
 }
 
-.logo-icon {
-  font-size: 2.5rem;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+.logo-icon img {
+  width: 90px;
+  height: auto;
+  
+  padding: 8px;
 }
 
 .brand-name {

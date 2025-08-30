@@ -1,16 +1,11 @@
 <nav class="navbar">
-  <div class="nav-header">
-    <div class="nav-left">
-      <h1 class="app-name" [routerLink]="['/home']">PageFlip</h1>
-    </div>
-    
-    <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" aria-label="Toggle menu">
-      <span class="hamburger"></span>
-    </button>
-  </div>
-
-  <div class="nav-content" [class.active]="isMobileMenuOpen">
-    <div class="nav-middle">
+  <div class="navbar-container">
+    <!-- Left Section: Logo + Search -->
+    <div class="navbar-left">
+      <div class="logo-container" [routerLink]="['/home']">
+        <img src="https://res.cloudinary.com/dvxjqofad/image/upload/v1756534916/Screenshot_2025-08-29_161909_gfqvy2.png" alt="PageFlip Logo" class="app-logo">
+        <h1 class="app-name">PageFlip</h1>
+      </div>
       <div class="search-container" title="Search by book title or author name">
         <input
           type="text"
@@ -20,42 +15,113 @@
           (keyup.enter)="onSearchEnter()"
           class="search-input"
         />
-        <div class="search-icon">🔍</div>
+        <div class="search-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </div>
       </div>
     </div>
 
-    <div class="nav-right">
+    <!-- Right Section: All Buttons -->
+    <div class="navbar-right">
+      <button class="nav-btn library-btn" [routerLink]="['/library']">
+        <span class="nav-icon">📚</span>
+        <span class="nav-text">My Library</span>
+      </button>
+      
+      <button class="nav-btn favorites-btn" [routerLink]="['/favorites']" title="My Favorites">
+        <span class="nav-icon">❤️</span>
+        <span class="nav-text">Favorites</span>
+      </button>
+      
+      <div class="theme-toggle-container" (click)="toggleTheme()" [title]="'Toggle theme'">
+        <div class="theme-toggle-switch" [class.dark-mode]="theme.isDarkMode">
+          <div class="toggle-slider">
+            <span class="toggle-icon">
+              {{ theme.isDarkMode ? '🌙' : '☀️' }}
+            </span>
+          </div>
+          <span class="toggle-label light">    LIGHT</span>
+          <span class="toggle-label dark">DARK   </span>
+        </div>
+      </div>
+      
+      <button class="profile-btn-round" [routerLink]="['/profile']" title="Profile">
+        <img 
+          [src]="profileImageUrl" 
+          alt="Profile" 
+          class="profile-icon" 
+        />
+      </button>
+      
+      <button class="nav-btn logout-btn" (click)="logout()">
+        <span class="nav-text">Logout</span>
+      </button>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
+      <span class="hamburger"></span>
+    </button>
+  </div>
+
+  <!-- Mobile Navigation -->
+  <div class="nav-content" [class.active]="isMobileMenuOpen">
+    <div class="mobile-search">
+      <div class="search-container">
+        <input
+          type="text"
+          placeholder="Search books or authors..."
+          [(ngModel)]="searchQuery"
+          (input)="onSearchChange()"
+          (keyup.enter)="onSearchEnter()"
+          class="search-input"
+        />
+        <div class="search-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mobile-nav-buttons">
       <button class="nav-btn library-btn" [routerLink]="['/library']" (click)="closeMobileMenu()">
         <span class="nav-icon">📚</span>
         <span class="nav-text">My Library</span>
       </button>
       
-      <button class="nav-btn favorites-btn" [routerLink]="['/favorites']" (click)="closeMobileMenu()" title="My Favorites">
+      <button class="nav-btn favorites-btn" [routerLink]="['/favorites']" (click)="closeMobileMenu()">
         <span class="nav-icon">❤️</span>
         <span class="nav-text">Favorites</span>
       </button>
       
-      <button class="nav-btn theme-toggle-btn" (click)="toggleTheme(); closeMobileMenu()" [title]="theme.isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
-        <span class="nav-icon">
-          {{ theme.isDarkMode ? '🌙' : '☀️' }}
-        </span>
-        <span class="nav-text">{{ theme.isDarkMode ? 'Dark Mode' : 'Light Mode' }}</span>
+      <div class="theme-toggle-container" (click)="toggleTheme(); closeMobileMenu()" [title]="'Toggle theme'">
+        <div class="theme-toggle-switch" [class.dark-mode]="theme.isDarkMode">
+          <div class="toggle-slider">
+            <span class="toggle-icon">
+              {{ theme.isDarkMode ? '🌙' : '☀️' }}
+            </span>
+          </div>
+          <span class="toggle-label light">LIGHT</span>
+          <span class="toggle-label dark">DARK</span>
+        </div>
+      </div>
+      
+      <button class="profile-btn-round" [routerLink]="['/profile']" (click)="closeMobileMenu()" title="Profile">
+        <img 
+          [src]="profileImageUrl" 
+          alt="Profile" 
+          class="profile-icon" 
+        />
       </button>
       
-      <div class="profile-section">
-        <button class="nav-btn profile-btn" [routerLink]="['/profile']" (click)="closeMobileMenu()">
-          <img 
-            [src]="profileImageUrl" 
-            alt="Profile" 
-            class="profile-icon" 
-          />
-          <span class="nav-text">Profile</span>
-        </button>
-        <button class="nav-btn logout-btn" (click)="logout(); closeMobileMenu()">
-          <span class="nav-icon">🚪</span>
-          <span class="nav-text">Logout</span>
-        </button>
-      </div>
+      <button class="nav-btn logout-btn" (click)="logout(); closeMobileMenu()">
+        <span class="nav-text">Logout</span>
+      </button>
     </div>
   </div>
 </nav>
