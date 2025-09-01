@@ -210,6 +210,5 @@ export class LibraryComponent implements OnInit {
     };
 
     const message = messages[type] || 'Book updated';
-    console.log(message, 'Library Update');
   }
 }

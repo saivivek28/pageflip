@@ -12,15 +12,10 @@ export class AdminGuard implements CanActivate {
     const token = this.authService.getToken();
     const role = this.authService.getRole();
     
-    console.log('AdminGuard - Token:', token);
-    console.log('AdminGuard - Role:', role);
-    
     if (token && role === 'admin') {
-      console.log('AdminGuard - Access granted');
       return true;
     }
     
-    console.log('AdminGuard - Access denied, redirecting to admin login');
     this.router.navigate(['/admin/login']);
     return false;
   }

@@ -387,7 +387,7 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
 }
-
+/* 
 .nav-left .app-name {
   margin: 0;
   font-size: 1.8rem;
@@ -399,12 +399,12 @@
   cursor: pointer;
   transition: all var(--transition-speed) ease;
   white-space: nowrap;
-}
+} */
 
-.nav-left .app-name:hover {
+/* .nav-left .app-name:hover {
   opacity: 0.9;
   transform: scale(1.02);
-}
+} */
 
 .search-container {
   position: relative;

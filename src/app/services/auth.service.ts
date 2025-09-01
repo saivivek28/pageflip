@@ -57,7 +57,6 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${this.apiUrl}/admin/login`, credentials)
       .pipe(
         tap(response => {
-          console.log('Admin login response:', response);
           if (response.token && response.role === 'admin') {
             // Store admin authentication data
             localStorage.setItem('JWT_token', response.token);
@@ -65,17 +64,12 @@ export class AuthService {
             localStorage.setItem('role', response.role);
             
             this.isLoggedInSubject.next(true);
-            console.log('Stored role:', localStorage.getItem('role'));
-            console.log('Stored token:', localStorage.getItem('JWT_token'));
             
             // Use setTimeout to ensure localStorage is set before navigation
             setTimeout(() => {
-              console.log('Navigating to admin dashboard...');
               this.toastService.success('Welcome Admin!', 'Login successful');
               this.router.navigate(['/admin/dashboard']);
             }, 100);
-          } else {
-            console.error('Invalid admin login response:', response);
           }
         })
       );

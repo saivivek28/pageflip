@@ -99,7 +99,6 @@ export class AdminDashboardComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading books:', error);
         this.isLoading = false;
       }
     });
@@ -107,17 +106,10 @@ export class AdminDashboardComponent implements OnInit {
 
   loadStats() {
     this.isLoadingStats = true;
-    const token = localStorage.getItem('JWT_token');
-    const role = localStorage.getItem('role');
-    
-    console.log('Loading stats with token:', token ? 'Token exists' : 'No token');
-    console.log('User role:', role);
-    
     this.http.get<AdminStats>(`${environment.apiUrl}/admin/stats`, {
       headers: this.getAuthHeaders()
     }).subscribe({
       next: (stats) => {
-        console.log('Raw stats from backend:', stats);
         this.stats = {
           totalUsers: stats.totalUsers || 0,
           totalBooks: stats.totalBooks || 0,
@@ -127,12 +119,8 @@ export class AdminDashboardComponent implements OnInit {
           lastUpdated: stats.lastUpdated || new Date().toISOString()
         };
         this.isLoadingStats = false;
-        console.log('Processed stats:', this.stats);
       },
       error: (error) => {
-        console.error('Error loading stats:', error);
-        console.error('Error details:', error.error);
-        console.error('Status:', error.status);
         // Set default values on error
         this.stats = {
           totalUsers: 0,
@@ -193,14 +181,11 @@ export class AdminDashboardComponent implements OnInit {
     }
 
     this.isLoading = true;
-    console.log('Adding book:', this.newBook);
-    console.log('Auth headers:', this.getAuthHeaders());
     
     this.http.post<Book>(`${environment.apiUrl}/admin/books`, this.newBook, {
       headers: this.getAuthHeaders()
     }).subscribe({
       next: (book) => {
-        console.log('Book added successfully:', book);
         this.books.push(book);
         this.hideAddForm();
         this.loadStats(); // Refresh stats to show updated book count
@@ -208,9 +193,6 @@ export class AdminDashboardComponent implements OnInit {
         this.toastService.success('Success!', 'Book added successfully');
       },
       error: (error) => {
-        console.error('Error adding book:', error);
-        console.error('Error status:', error.status);
-        console.error('Error details:', error.error);
         this.toastService.error('Error!', 'Failed to add book: ' + (error.error?.error || 'Unknown error'));
         this.isLoading = false;
       }

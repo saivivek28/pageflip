@@ -107,8 +107,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     localStorage.removeItem('JWT_token');
     localStorage.removeItem('id');
     localStorage.removeItem('role');
-    localStorage.removeItem('email'); 
-    console.log("User logged out");
+    localStorage.removeItem('email');
   }
 
   ngOnDestroy() {

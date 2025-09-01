@@ -75,13 +75,11 @@ export class EditProfileComponent implements OnInit {
     // Update via API
     this.http.put(`${environment.apiUrl}/user/${userId}`, this.userData).subscribe({
       next: (res: any) => {
-        console.log('Profile updated successfully via API', res);
         this.toastService.success('Success!', 'Profile updated successfully');
         this.updateProfileImageAcrossApp(res.profileImageUrl);
         this.router.navigate(['/profile'])
       },
       error: (err) => {
-        console.log('API error, but profile saved locally', err);
         this.toastService.warning('Connection Issue', 'Profile saved locally. API connection failed.');
         this.router.navigate(['/profile']);
       }

@@ -55,7 +55,7 @@ const port = process.env['PORT'] || 4000;
 const server = createServer();
 
 server.listen(port, () => {
-  console.log(`Node Express server listening on port ${port}`);
+  // Server started successfully
 });
 
 export default server;

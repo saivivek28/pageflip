@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   searchQuery: string = '';
   // Pagination
   currentPage: number = 1;
-  pageSize: number = 12;
+  pageSize: number = 15;
 
   // Hero section properties
   featuredBooks: any[] = [];
@@ -94,9 +94,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   getBooks() {
     this.http.get(this.apiUrl).subscribe((data: any) => {
       this.books = data;
-      console.log('Raw API data:', data);
       this.filteredBooks = this.books;
-      console.log('Featured after set:', this.featuredBooks);
       
       // Set featured books based on user data or random selection
       this.setFeaturedBooks();
