@@ -29,22 +29,191 @@
       </div>
     </div>
     <h2>About this Book</h2>
-  <p>{{book.description}}</p>
+    <p>{{book.description}}</p>
   </div>
 
 </div>
 
+<!-- RATING & REVIEWS SECTION -->
+<div class="rating-reviews-section" *ngIf="book">
+  <!-- Book Rating Overview -->
+  <div class="rating-overview">
+    <h3>Ratings & Reviews</h3>
+    <div class="rating-summary">
+      <div class="average-rating">
+        <div class="rating-number">{{ bookRating?.averageRating || 0 | number:'1.1-1' }}</div>
+        <div class="rating-stars">
+          <span class="star" *ngFor="let star of [1,2,3,4,5]" 
+                [class.filled]="star <= (bookRating?.averageRating || 0)">
+            ★
+          </span>
+        </div>
+        <div class="total-reviews">{{ bookRating?.totalReviews || 0 }} reviews</div>
+      </div>
+      
+      <div class="rating-distribution" *ngIf="bookRating?.ratingDistribution">
+        <div class="rating-bar" *ngFor="let rating of [5,4,3,2,1]">
+          <span class="rating-label">{{ rating }}★</span>
+          <div class="bar-container">
+            <div class="bar-fill" 
+                 [style.width.%]="getRatingPercentage(rating)"></div>
+          </div>
+          <span class="rating-count">{{ getRatingCount(rating) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<!-- ✅ REVIEWS -->
-<div class="reviews" *ngIf="reviews.length > 0">
-  <h3>Reviews</h3>
-  <div class="review" *ngFor="let review of reviews">
-    <strong>{{ review.user }}</strong>
-    <p>"{{ review.comment }}"</p>
+  <!-- Add Review Form -->
+  <div class="add-review-section" *ngIf="!userReview && isLoggedIn">
+    <h4>Write a Review</h4>
+    <div class="review-form">
+      <div class="rating-input">
+        <label>Your Rating:</label>
+        <div class="star-rating">
+          <span class="star-input" 
+                *ngFor="let star of [1,2,3,4,5]" 
+                [class.filled]="star <= newReview.rating"
+                [class.hovered]="star <= hoveredRating"
+                (click)="setRating(star)"
+                (mouseenter)="hoveredRating = star"
+                (mouseleave)="hoveredRating = 0">
+            ★
+          </span>
+        </div>
+      </div>
+      
+      <div class="comment-input">
+        <label>Your Review:</label>
+        <textarea 
+          [(ngModel)]="newReview.comment" 
+          placeholder="Share your thoughts about this book..."
+          rows="4"
+          maxlength="500">
+        </textarea>
+        <div class="character-count">{{ newReview.comment.length || 0 }}/500</div>
+      </div>
+      
+      <div class="review-actions">
+        <button class="submit-review-btn" 
+                (click)="submitReview()"
+                [disabled]="!newReview.rating || !newReview.comment.trim()">
+          Submit Review
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- User's Existing Review -->
+  <div class="user-review-section" *ngIf="userReview && isLoggedIn">
+    <h4>Your Review</h4>
+    <div class="user-review-card">
+      <div class="review-header">
+        <div class="review-rating">
+          <span class="star" *ngFor="let star of [1,2,3,4,5]" 
+                [class.filled]="star <= userReview.rating">
+            ★
+          </span>
+        </div>
+        <div class="review-actions">
+          <button class="edit-btn" (click)="startEditReview()" *ngIf="!isEditingReview">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+          </button>
+          <button class="delete-btn" (click)="deleteReview()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3,6 5,6 21,6"></polyline>
+              <path d="m19,6v14a2,2 0 0,1-2,2H7a2,2 0 0,1-2-2V6m3,0V4a2,2 0 0,1,2-2h4a2,2 0 0,1,2,2v2"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <div class="review-content" *ngIf="!isEditingReview">
+        <p>{{ userReview.comment }}</p>
+        <small class="review-date">{{ formatDate(userReview.createdAt) }}</small>
+      </div>
+      
+      <!-- Edit Review Form -->
+      <div class="edit-review-form" *ngIf="isEditingReview">
+        <div class="rating-input">
+          <label>Rating:</label>
+          <div class="star-rating">
+            <span class="star-input" 
+                  *ngFor="let star of [1,2,3,4,5]" 
+                  [class.filled]="star <= editReview.rating"
+                  [class.hovered]="star <= hoveredRating"
+                  (click)="editReview.rating = star"
+                  (mouseenter)="hoveredRating = star"
+                  (mouseleave)="hoveredRating = 0">
+              ★
+            </span>
+          </div>
+        </div>
+        
+        <textarea 
+          [(ngModel)]="editReview.comment" 
+          rows="4"
+          maxlength="500">
+        </textarea>
+        
+        <div class="edit-actions">
+          <button class="save-btn" (click)="saveReview()">Save</button>
+          <button class="cancel-btn" (click)="cancelEdit()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Prompt -->
+  <div class="login-prompt" *ngIf="!isLoggedIn">
+    <p>Please <a [routerLink]="['/login']">login</a> to write a review.</p>
+  </div>
+
+  <!-- All Reviews -->
+  <div class="all-reviews" *ngIf="reviews.length > 0">
+    <h4>All Reviews ({{ reviews.length }})</h4>
+    <div class="reviews-list">
+      <div class="review-card" *ngFor="let review of reviews">
+        <div class="review-header">
+          <div class="reviewer-info">
+            <div class="reviewer-avatar">
+              {{ getInitials(review.userName) }}
+            </div>
+            <div class="reviewer-details">
+              <strong class="reviewer-name">{{ review.userName }}</strong>
+              <div class="review-rating">
+                <span class="star" *ngFor="let star of [1,2,3,4,5]" 
+                      [class.filled]="star <= review.rating">
+                  ★
+                </span>
+              </div>
+            </div>
+          </div>
+          <small class="review-date">{{ formatDate(review.createdAt) }}</small>
+        </div>
+        
+        <div class="review-content">
+          <p>{{ review.comment }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Reviews Message -->
+  <div class="no-reviews" *ngIf="reviews.length === 0">
+    <div class="no-reviews-icon">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+      </svg>
+    </div>
+    <p>No reviews yet. Be the first to review this book!</p>
   </div>
 </div>
 
-<!-- ✅ RECOMMENDED BOOKS -->
+<!-- RECOMMENDED BOOKS -->
  <div class="recommended" *ngIf="recommendedBooks.length > 0">
   <h3>You May Also Like</h3>
   <div class="recommended-list">

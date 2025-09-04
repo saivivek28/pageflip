@@ -157,4 +157,5 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
     return 'https://cdn-icons-png.flaticon.com/128/9131/9131529.png';
   }
+
 }

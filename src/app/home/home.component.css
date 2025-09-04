@@ -2,7 +2,7 @@
 
 /* Hero Section */
 .hero-section {
-  background: linear-gradient(135deg, rgba(52,152,219,0.6) 0%, rgba(41,128,185,0.6) 60%, rgba(44,62,80,0.7) 100%);
+  background: var(--hero-gradient, linear-gradient(135deg, rgba(52,152,219,0.6) 0%, rgba(41,128,185,0.6) 60%, rgba(44,62,80,0.7) 100%));
   padding: 2.5rem 2rem;
   text-align: center;
   color: white;
@@ -11,6 +11,84 @@
   border-radius: 0 0 25px 25px;
   margin-bottom: 2rem;
   z-index: 1;
+  transition: background 0.3s ease;
+}
+
+/* Floating Background Elements */
+.floating-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floating-book, .floating-star, .floating-heart {
+  position: absolute;
+  opacity: 0.1;
+  animation-duration: 15s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.floating-book {
+  color: rgba(255, 255, 255, 0.3);
+  animation-name: floatBook;
+}
+
+.floating-star {
+  color: rgba(255, 215, 0, 0.4);
+  animation-name: floatStar;
+}
+
+.floating-heart {
+  color: rgba(255, 182, 193, 0.3);
+  animation-name: floatHeart;
+}
+
+.floating-book:nth-child(1) { top: 10%; left: 10%; animation-duration: 12s; }
+.floating-book:nth-child(2) { top: 20%; left: 80%; animation-duration: 18s; }
+.floating-book:nth-child(3) { top: 60%; left: 15%; animation-duration: 14s; }
+.floating-book:nth-child(4) { top: 80%; left: 70%; animation-duration: 16s; }
+.floating-book:nth-child(5) { top: 30%; left: 50%; animation-duration: 20s; }
+.floating-book:nth-child(6) { top: 70%; left: 30%; animation-duration: 13s; }
+.floating-book:nth-child(7) { top: 40%; left: 85%; animation-duration: 17s; }
+.floating-book:nth-child(8) { top: 90%; left: 5%; animation-duration: 15s; }
+
+.floating-star:nth-child(1) { top: 15%; left: 25%; animation-duration: 10s; }
+.floating-star:nth-child(2) { top: 45%; left: 75%; animation-duration: 12s; }
+.floating-star:nth-child(3) { top: 75%; left: 20%; animation-duration: 14s; }
+.floating-star:nth-child(4) { top: 25%; left: 90%; animation-duration: 11s; }
+.floating-star:nth-child(5) { top: 85%; left: 60%; animation-duration: 13s; }
+
+.floating-heart:nth-child(1) { top: 35%; left: 10%; animation-duration: 16s; }
+.floating-heart:nth-child(2) { top: 65%; left: 80%; animation-duration: 18s; }
+.floating-heart:nth-child(3) { top: 55%; left: 40%; animation-duration: 14s; }
+
+@keyframes floatBook {
+  0% { transform: translateY(0px) rotate(0deg); opacity: 0.1; }
+  25% { opacity: 0.3; }
+  50% { transform: translateY(-20px) rotate(180deg); opacity: 0.2; }
+  75% { opacity: 0.4; }
+  100% { transform: translateY(0px) rotate(360deg); opacity: 0.1; }
+}
+
+@keyframes floatStar {
+  0% { transform: translateY(0px) scale(1); opacity: 0.2; }
+  25% { transform: translateY(-15px) scale(1.2); opacity: 0.5; }
+  50% { transform: translateY(-30px) scale(0.8); opacity: 0.3; }
+  75% { transform: translateY(-15px) scale(1.1); opacity: 0.4; }
+  100% { transform: translateY(0px) scale(1); opacity: 0.2; }
+}
+
+@keyframes floatHeart {
+  0% { transform: translateX(0px) scale(1); opacity: 0.15; }
+  25% { transform: translateX(10px) scale(1.1); opacity: 0.3; }
+  50% { transform: translateX(-10px) scale(0.9); opacity: 0.2; }
+  75% { transform: translateX(5px) scale(1.05); opacity: 0.35; }
+  100% { transform: translateX(0px) scale(1); opacity: 0.15; }
 }
 
 .hero-video {
@@ -601,6 +679,7 @@
   margin: 0.5rem 0 0.3rem 0;
   color: #2c3e50;
   background: linear-gradient(to right, #2c3e50, #3498db);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   overflow: hidden;
