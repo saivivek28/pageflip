@@ -249,12 +249,12 @@
 }
 
 .favorites-btn {
-  background: linear-gradient(90deg, #e74c3c, #c0392b);
+  background: #3F51B5;
   color: #fff;
 }
 
 .favorites-btn:hover {
-  background: linear-gradient(90deg, #c0392b, #e74c3c);
+  /* background: linear-gradient(90deg, #c0392b, #e74c3c); */
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
 }

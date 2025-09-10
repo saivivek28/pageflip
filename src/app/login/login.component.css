@@ -168,7 +168,7 @@
   border-color: #667eea;
   background: white;
   box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-  transform: translateY(-2px);
+  transform: translateY(6px);
 }
 
 .form-input:focus + .form-label,

@@ -242,3 +242,106 @@ html {
     margin: 1rem;
   }
 }
+/* Favorites Page Dark Mode */
+body.dark-mode .favorites-container {
+  background: linear-gradient(180deg, #121212 0%, #0e0e0e 100%) !important;
+  color: #e4e4e4 !important;
+}
+
+body.dark-mode .favorites-header h2 {
+  background: linear-gradient(45deg, #4a90e2, #2d6cdf) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+body.dark-mode .favorites-subtitle {
+  color: #b0b0b0 !important;
+}
+
+body.dark-mode .search-input {
+  background: #1e1e1e !important;
+  color: #e4e4e4 !important;
+  border-color: #3a3a3a !important;
+}
+
+body.dark-mode .favorites-controls {
+  background: #1a1a1a !important;
+  border-color: #2a2a2a !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+}
+
+body.dark-mode .view-btn {
+  background: #1f1f1f !important;
+  border-color: #333 !important;
+  color: #ddd !important;
+}
+body.dark-mode .view-btn.active {
+  background: #2d6cdf !important;
+  border-color: #2d6cdf !important;
+  color: #fff !important;
+}
+
+body.dark-mode .filter-chip {
+  background: #1f1f1f !important;
+  border-color: #333 !important;
+  color: #ddd !important;
+}
+body.dark-mode .filter-chip.active {
+  background: #2d6cdf !important;
+  border-color: #2d6cdf !important;
+  color: #fff !important;
+}
+
+body.dark-mode .sort-select {
+  background: #1f1f1f !important;
+  color: #e4e4e4 !important;
+  border-color: #333 !important;
+}
+
+body.dark-mode .clear-filters-btn {
+  background: #444 !important;
+  color: #fff !important;
+}
+body.dark-mode .clear-filters-btn:hover {
+  background: #555 !important;
+}
+
+body.dark-mode .empty-state {
+  background: #1a1a1a !important;
+  color: #ddd !important;
+  border-color: #2a2a2a !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35) !important;
+}
+
+body.dark-mode .browse-btn {
+  background: #2d6cdf !important;
+  color: #fff !important;
+}
+body.dark-mode .browse-btn:hover {
+  background: #1e40af !important;
+}
+
+body.dark-mode .book-card {
+  background: #1a1a1a !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6) !important;
+  border-color: #2a2a2a !important;
+}
+
+body.dark-mode .book-info {
+  background: #1a1a1a !important;
+}
+
+body.dark-mode .favorite-btn {
+  background: #2a2a2a !important;
+  color: #ff4d4d !important;
+}
+body.dark-mode .favorite-btn.favorited {
+  background: #e74c3c !important;
+  color: #fff !important;
+}
+
+body.dark-mode .favorite-badge {
+  background: linear-gradient(45deg, #e74c3c, #c0392b) !important;
+}

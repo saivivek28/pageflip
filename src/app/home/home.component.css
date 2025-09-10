@@ -3,6 +3,8 @@
 /* Hero Section */
 .hero-section {
   background: var(--hero-gradient, linear-gradient(135deg, rgba(52,152,219,0.6) 0%, rgba(41,128,185,0.6) 60%, rgba(44,62,80,0.7) 100%));
+  /* background: linear-gradient(135deg, #455A64 0%, #1A237E 100%); */
+
   padding: 2.5rem 2rem;
   text-align: center;
   color: white;
