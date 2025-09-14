@@ -6,6 +6,7 @@ import { Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/ro
 import { environment } from '../../environments/environment';
 import { ThemeService } from '../theme.service';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { LibraryService } from '../services/library.service';
 
 @Component({
   selector: 'app-navbar',
@@ -31,7 +32,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private router: Router, 
     private http: HttpClient, 
     public theme: ThemeService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private libraryService: LibraryService
   ) {
     this.checkScreenSize();
   }
@@ -78,6 +80,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
           try { this.userData = JSON.parse(localStorage.getItem('userData') || '{}'); } catch {}
         }
       });
+
+      // One-time migration of existing localStorage library to backend
+      this.migrateLibraryFromLocalStorage(userId);
     }
   }
 
@@ -149,6 +154,62 @@ export class NavbarComponent implements OnInit, OnDestroy {
   closeMobileMenu() {
     this.isMobileMenuOpen = false;
     document.body.style.overflow = '';
+  }
+
+  // One-time migration of existing local library to the backend once per user
+  private migrateLibraryFromLocalStorage(userId: string) {
+    try {
+      const migratedFlag = localStorage.getItem(`library_migrated_${userId}`);
+      if (migratedFlag === '1') return;
+
+      const key = `libraryBooks_${userId}`;
+      const stored = localStorage.getItem(key);
+      if (!stored) {
+        localStorage.setItem(`library_migrated_${userId}`, '1');
+        return;
+      }
+
+      const books = JSON.parse(stored || '[]');
+      if (!Array.isArray(books) || books.length === 0) {
+        localStorage.setItem(`library_migrated_${userId}`, '1');
+        localStorage.removeItem(key);
+        return;
+      }
+
+      let completed = 0;
+      const total = books.length;
+      const done = () => {
+        completed++;
+        if (completed >= total) {
+          // Mark as migrated and remove old key
+          localStorage.setItem(`library_migrated_${userId}`, '1');
+          localStorage.removeItem(key);
+        }
+      };
+
+      for (const b of books) {
+        const payload: any = {
+          bookId: b.bookId || b._id,
+          isFavorite: !!b.isFavorite,
+          rating: b.userRating ?? b.rating ?? undefined,
+          dateAdded: b.dateAdded || new Date()
+        };
+        if (!payload.bookId) { done(); continue; }
+        this.libraryService.addToLibrary(userId, payload).subscribe({
+          next: () => done(),
+          error: () => {
+            // Try update if add fails (in case it already exists)
+            this.libraryService.updateLibraryItem(userId, payload.bookId, { isFavorite: payload.isFavorite, rating: payload.rating }).subscribe({
+              next: () => done(),
+              error: () => done()
+            });
+          }
+        });
+      }
+    } catch {
+      // If anything goes wrong, set flag to avoid loops but do not crash UI
+      localStorage.setItem(`library_migrated_${userId}`, '1');
+    }
   }
 
   get profileImageUrl(): string {

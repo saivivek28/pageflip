@@ -2,11 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { LibraryService } from '../services/library.service';
 
 @Component({
   selector: 'app-library',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, HttpClientModule],
   templateUrl: './library.component.html',
   styleUrl: './library.component.css'
 })
@@ -35,7 +37,7 @@ export class LibraryComponent implements OnInit {
   hasMoreBooks: boolean = false;
   isLoading: boolean = false;
 
-  constructor() {}
+  constructor(private libraryService: LibraryService) {}
 
   ngOnInit() {
     this.loadLibraryBooks();
@@ -43,12 +45,16 @@ export class LibraryComponent implements OnInit {
 
   loadLibraryBooks() {
     const userId = localStorage.getItem('id');
-    if (userId) {
-      const stored = localStorage.getItem(`libraryBooks_${userId}`);
-      this.libraryBooks = stored ? JSON.parse(stored) : [];
-      this.setupFilters(); // Call setupFilters after books are loaded
+    if (!userId) {
+      this.libraryBooks = [];
       this.applyFiltersAndSort();
+      return;
     }
+    this.libraryService.getLibrary(userId).subscribe(items => {
+      this.libraryBooks = items || [];
+      this.setupFilters();
+      this.applyFiltersAndSort();
+    });
   }
 
   setupFilters() {
@@ -159,36 +165,41 @@ export class LibraryComponent implements OnInit {
   }
 
   toggleFavorite(book: any) {
-    book.isFavorite = !book.isFavorite;
-    this.saveLibraryBooks();
-    this.showNotification(book, book.isFavorite ? 'favorited' : 'unfavorited');
+    const userId = localStorage.getItem('id');
+    if (!userId) return;
+    const newVal = !book.isFavorite;
+    this.libraryService.updateLibraryItem(userId, book.bookId, { isFavorite: newVal }).subscribe(() => {
+      book.isFavorite = newVal;
+      this.applyFiltersAndSort();
+      this.showNotification(book, newVal ? 'favorited' : 'unfavorited');
+    });
   }
 
   removeBook(index: number): void {
     const userId = localStorage.getItem('id');
     if (!userId) return;
-
     const removedBook = this.libraryBooks[index];
-    this.libraryBooks.splice(index, 1);
-    this.saveLibraryBooks();
-    this.applyFiltersAndSort();
-    this.showNotification(removedBook, 'removed');
+    if (!removedBook) return;
+    this.libraryService.removeFromLibrary(userId, removedBook.bookId).subscribe(() => {
+      this.libraryBooks.splice(index, 1);
+      this.applyFiltersAndSort();
+      this.showNotification(removedBook, 'removed');
+    });
   }
 
-  saveLibraryBooks() {
-    const userId = localStorage.getItem('id');
-    if (userId) {
-      localStorage.setItem(`libraryBooks_${userId}`, JSON.stringify(this.libraryBooks));
-    }
-  }
+  // Deprecated local persistence removed; server-side persistence via LibraryService
 
   // Allow user to rate a book 1..5, persist to local storage, and re-apply sorting/filters
   rateBook(book: any, rating: number) {
     const clamped = Math.max(1, Math.min(5, Math.round(rating)));
-    book.rating = clamped;
-    this.saveLibraryBooks();
-    this.applyFiltersAndSort();
-    this.showNotification(book, 'rated');
+    const userId = localStorage.getItem('id');
+    if (!userId) return;
+    // Persist personal rating in user library item
+    this.libraryService.updateLibraryItem(userId, book.bookId, { rating: clamped }).subscribe(() => {
+      book.userRating = clamped;
+      this.applyFiltersAndSort();
+      this.showNotification(book, 'rated');
+    });
   }
 
   loadMoreBooks() {

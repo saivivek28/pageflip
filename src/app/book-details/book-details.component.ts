@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { NotificationService } from '../notification.service';
 import { ReviewsService, Review, BookRating } from '../services/reviews.service';
+import { LibraryService } from '../services/library.service';
 
 @Component({
   selector: 'app-book-details',
@@ -45,7 +46,8 @@ export class BookDetailsComponent {
     private http: HttpClient,
     private toastr: ToastrService,
     private notificationService: NotificationService,
-    private reviewsService: ReviewsService
+    private reviewsService: ReviewsService,
+    private libraryService: LibraryService
   ) {
     this.checkLoginStatus();
   }
@@ -195,18 +197,22 @@ export class BookDetailsComponent {
       return;
     }
 
-    const key = `libraryBooks_${userId}`;
-    const stored = localStorage.getItem(key);
-    let books = stored ? JSON.parse(stored) : [];
-
-    const exists = books.some((b: any) => b.bookId === book.bookId);
-    if (!exists) {
-      books.push(book);
-      localStorage.setItem(key, JSON.stringify(books));
-      this.notificationService.showNotification(book, 'added');
-    } else {
-      this.notificationService.showNotification(book, 'exists');
-    }
+    // Try to add via backend; if it already exists, just notify
+    this.libraryService.addToLibrary(userId, { bookId: book.bookId, dateAdded: new Date() }).subscribe({
+      next: () => this.notificationService.showNotification(book, 'added'),
+      error: (err) => {
+        if (err?.status === 409) {
+          this.notificationService.showNotification(book, 'exists');
+        } else if (err?.status === 404) {
+          // As a fallback, try creating again
+          this.libraryService.addToLibrary(userId, { bookId: book.bookId, dateAdded: new Date() }).subscribe(() => {
+            this.notificationService.showNotification(book, 'added');
+          });
+        } else {
+          this.toastr.error('Failed to add to library', 'Error');
+        }
+      }
+    });
   }
   
   // Rating and Review Methods

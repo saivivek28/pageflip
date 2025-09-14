@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EnvironmentInjector } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -34,6 +34,8 @@ export class SignupComponent {
   ) {}
 
   signup() {
+    this.imageUploading = true; // Show loading immediately on click
+
     const reqBody: any = {
       name: this.username.trim(),
       email: this.email.trim(),
@@ -44,6 +46,7 @@ export class SignupComponent {
 
     if (!reqBody.name || !reqBody.email || !reqBody.password || !reqBody.phone || !reqBody.address) {
       this.toastr.error('All fields are required');
+      this.imageUploading = false; // Reset loader if validation fails
       return;
     }
 
@@ -58,7 +61,7 @@ export class SignupComponent {
           password: this.password.trim()
         }).subscribe({
           next: (loginRes) => {
-            // Reset any previous session
+            // Reset previous session
             localStorage.removeItem('JWT_token');
             localStorage.removeItem('id');
             localStorage.removeItem('role');
@@ -68,7 +71,6 @@ export class SignupComponent {
             if (loginRes?.token) localStorage.setItem('JWT_token', loginRes.token);
             if (loginRes?._id) localStorage.setItem('id', loginRes._id);
             localStorage.setItem('role', 'user');
-
             const userId = loginRes?._id;
 
             // Prefetch user data for immediate availability in profile
@@ -77,49 +79,43 @@ export class SignupComponent {
                 next: (userRes) => {
                   localStorage.setItem('userData', JSON.stringify(userRes));
                 },
-                error: () => {
-                  // ignore; not critical
-                }
+                error: () => { /* ignore; not critical */ }
               });
             }
 
             // Step 3: If profile image selected, upload to /user/{id}/profile-image
             const doNavigate = () => {
-              // Step 4: Navigate to home
+              this.imageUploading = false; // Hide loader here, after all is done
               this.router.navigate(['/home']);
             };
 
             if (this.profileImageFile && userId) {
               const formData = new FormData();
               formData.append('image', this.profileImageFile);
-              this.imageUploading = true;
+
               this.http.post<any>(`${this.apiUrl}/user/${userId}/profile-image`, formData).subscribe({
                 next: (uploadRes) => {
-                  this.imageUploading = false;
-                  // Update cached userData with new image url
                   const current = localStorage.getItem('userData');
                   const parsed = current ? JSON.parse(current) : {};
                   parsed.profileImageUrl = uploadRes?.url || uploadRes?.profileImageUrl || '';
                   localStorage.setItem('userData', JSON.stringify(parsed));
                   doNavigate();
                 },
-                error: () => {
-                  this.imageUploading = false;
-                  doNavigate();
-                }
+                error: () => { doNavigate(); }
               });
             } else {
               doNavigate();
             }
           },
           error: (loginErr) => {
-            // If auto-login fails, send user to login explicitly
+            this.imageUploading = false; // Reset loader if login fails
             this.toastr.error(loginErr?.error?.error || 'Login after registration failed');
             this.router.navigate(['/login']);
           }
         });
       },
       error: (err) => {
+        this.imageUploading = false; // Reset loader if registration fails
         let errorMsg = 'Registration failed';
         if (err.status === 400 && err.error && typeof err.error === 'object') {
           errorMsg = Object.entries(err.error)

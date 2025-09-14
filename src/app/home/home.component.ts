@@ -5,6 +5,7 @@ import { Router, RouterModule, RouterLink, ActivatedRoute } from '@angular/route
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { LibraryService } from '../services/library.service';
 import { ChatbotService, ChatMessage } from '../chatbot.service';
 import { Subscription } from 'rxjs';
 
@@ -66,7 +67,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private chatbotService: ChatbotService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private libraryService: LibraryService
   ) {}
 
   ngOnInit() {
@@ -106,42 +108,52 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   setFeaturedBooks() {
     const userId = localStorage.getItem('id');
-    if (userId) {
-      // Check if user has library books
-      const stored = localStorage.getItem(`libraryBooks_${userId}`);
-      if (stored) {
-        const userBooks = JSON.parse(stored);
-        // Get user's favorite books first
-        const favorites = userBooks.filter((book: any) => book.isFavorite);
-        
-        if (favorites.length >= 6) {
-          // If user has 6+ favorites, use them
-          this.featuredBooks = favorites.slice(0, 6);
-          this.isNewUser = false;
-        } else if (favorites.length > 0) {
-          // Mix favorites with some random books
-          const remainingSlots = 6 - favorites.length;
-          const randomBooks = this.getRandomBooks(remainingSlots, favorites.map((b: any) => b.bookId));
-          this.featuredBooks = [...favorites, ...randomBooks];
-          this.isNewUser = false;
-        } else {
-          // User has no favorites, show random books
-          this.featuredBooks = this.getRandomBooks(6);
-          this.isNewUser = true;
-        }
-      } else {
-        // New user, show random popular books
-        this.featuredBooks = this.getRandomBooks(6);
-        this.isNewUser = true;
-      }
-    } else {
-      // No user logged in, show random books
+    if (!userId) {
       this.featuredBooks = this.getRandomBooks(6);
       this.isNewUser = true;
+      this.maxSlides = Math.max(0, this.featuredBooks.length - 3);
+      return;
     }
-    
-    // Calculate max slides for carousel
-    this.maxSlides = Math.max(0, this.featuredBooks.length - 3);
+
+    // Prefer user's favorites from backend
+    this.libraryService.getFavorites(userId).subscribe({
+      next: (favorites) => {
+        const favs = Array.isArray(favorites) ? favorites : [];
+        if (favs.length >= 6) {
+          this.featuredBooks = favs.slice(0, 6);
+          this.isNewUser = false;
+        } else if (favs.length > 0) {
+          const remaining = 6 - favs.length;
+          const randomBooks = this.getRandomBooks(remaining, favs.map((b: any) => b.bookId));
+          this.featuredBooks = [...favs, ...randomBooks];
+          this.isNewUser = false;
+        } else {
+          // If no favorites, try user's library as secondary source
+          this.libraryService.getLibrary(userId).subscribe((lib) => {
+            const libItems = Array.isArray(lib) ? lib : [];
+            if (libItems.length > 0) {
+              const pick = libItems.slice(0, Math.min(6, libItems.length));
+              const remaining = Math.max(0, 6 - pick.length);
+              const randomBooks = remaining > 0 ? this.getRandomBooks(remaining, pick.map((b: any) => b.bookId)) : [];
+              this.featuredBooks = [...pick, ...randomBooks];
+              this.isNewUser = false;
+            } else {
+              this.featuredBooks = this.getRandomBooks(6);
+              this.isNewUser = true;
+            }
+            this.maxSlides = Math.max(0, this.featuredBooks.length - 3);
+          });
+          return; // We'll set maxSlides in inner subscribe
+        }
+        this.maxSlides = Math.max(0, this.featuredBooks.length - 3);
+      },
+      error: () => {
+        // On error fallback to random
+        this.featuredBooks = this.getRandomBooks(6);
+        this.isNewUser = true;
+        this.maxSlides = Math.max(0, this.featuredBooks.length - 3);
+      }
+    });
   }
 
   // Compute a display rating for a book. If the book has a numeric rating, use it.

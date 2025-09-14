@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { LibraryService } from '../services/library.service';
 
 @Component({
   selector: 'app-favorites',
@@ -32,7 +33,7 @@ export class FavoritesComponent implements OnInit {
   // Search
   searchQuery: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private libraryService: LibraryService) {}
 
   ngOnInit() {
     this.loadFavoriteBooks();
@@ -40,15 +41,16 @@ export class FavoritesComponent implements OnInit {
 
   loadFavoriteBooks() {
     const userId = localStorage.getItem('id');
-    if (userId) {
-      const stored = localStorage.getItem(`libraryBooks_${userId}`);
-      if (stored) {
-        const allBooks = JSON.parse(stored);
-        this.favoriteBooks = allBooks.filter((book: any) => book.isFavorite);
-        this.setupFilters(); // Call setupFilters after books are loaded
-        this.applyFiltersAndSort();
-      }
+    if (!userId) {
+      this.favoriteBooks = [];
+      this.applyFiltersAndSort();
+      return;
     }
+    this.libraryService.getFavorites(userId).subscribe((items) => {
+      this.favoriteBooks = items || [];
+      this.setupFilters();
+      this.applyFiltersAndSort();
+    });
   }
 
   setupFilters() {
@@ -151,38 +153,46 @@ export class FavoritesComponent implements OnInit {
   }
 
   toggleFavorite(book: any) {
-    book.isFavorite = !book.isFavorite;
-    this.saveFavoriteBooks();
-    this.loadFavoriteBooks(); // Reload to update the list
+    const userId = localStorage.getItem('id');
+    if (!userId) return;
+    const newVal = !book.isFavorite;
+    this.libraryService.updateLibraryItem(userId, book.bookId, { isFavorite: newVal }).subscribe({
+      next: () => {
+        if (!newVal) {
+          this.favoriteBooks = this.favoriteBooks.filter(b => b.bookId !== book.bookId);
+          this.filteredFavoriteBooks = this.filteredFavoriteBooks.filter(b => b.bookId !== book.bookId);
+        } else {
+          book.isFavorite = true;
+        }
+        this.applyFiltersAndSort();
+      },
+      error: (err) => {
+        if (err?.status === 404) {
+          // Create the item then toggle favorite
+          this.libraryService.addToLibrary(userId, { bookId: book.bookId, isFavorite: newVal, dateAdded: new Date() }).subscribe(() => {
+            if (!newVal) {
+              this.favoriteBooks = this.favoriteBooks.filter(b => b.bookId !== book.bookId);
+              this.filteredFavoriteBooks = this.filteredFavoriteBooks.filter(b => b.bookId !== book.bookId);
+            } else {
+              book.isFavorite = true;
+            }
+            this.applyFiltersAndSort();
+          });
+        }
+      }
+    });
   }
 
-  saveFavoriteBooks() {
-    const userId = localStorage.getItem('id');
-    if (userId) {
-      const stored = localStorage.getItem(`libraryBooks_${userId}`);
-      if (stored) {
-        const allBooks = JSON.parse(stored);
-        const updatedBooks = allBooks.map((book: any) => {
-          const favoriteBook = this.favoriteBooks.find(fb => fb.bookId === book.bookId);
-          if (favoriteBook) {
-            return { ...book, isFavorite: favoriteBook.isFavorite };
-          }
-          return book;
-        });
-        localStorage.setItem(`libraryBooks_${userId}`, JSON.stringify(updatedBooks));
-      }
-    }
-  }
+  // Removed localStorage persistence. Changes are saved via LibraryService API.
 
   removeFromFavorites(book: any) {
-    book.isFavorite = false;
-    this.saveFavoriteBooks();
-    // Remove from filteredFavoriteBooks immediately for UI responsiveness
-    this.filteredFavoriteBooks = this.filteredFavoriteBooks.filter(b => b.bookId !== book.bookId);
-    // Also update favoriteBooks for consistency
-    this.favoriteBooks = this.favoriteBooks.filter(b => b.bookId !== book.bookId);
-    // Optionally, re-apply filters and sort
-    this.applyFiltersAndSort();
+    const userId = localStorage.getItem('id');
+    if (!userId) return;
+    this.libraryService.updateLibraryItem(userId, book.bookId, { isFavorite: false }).subscribe(() => {
+      this.filteredFavoriteBooks = this.filteredFavoriteBooks.filter(b => b.bookId !== book.bookId);
+      this.favoriteBooks = this.favoriteBooks.filter(b => b.bookId !== book.bookId);
+      this.applyFiltersAndSort();
+    });
   }
 
   rateBook(book: any, rating: number) {
@@ -201,18 +211,16 @@ export class FavoritesComponent implements OnInit {
         this.favoriteBooks.forEach(applyUpdate);
         this.filteredFavoriteBooks.forEach(applyUpdate);
 
-        // Persist to user's library in localStorage so filters reflect new rating
+        // Optionally persist personal rating in user library item
         const userId = localStorage.getItem('id');
         if (userId) {
-          const key = `libraryBooks_${userId}`;
-          const stored = localStorage.getItem(key);
-          if (stored) {
-            const allBooks = JSON.parse(stored);
-            const updatedBooks = allBooks.map((b: any) => (
-              b.bookId === book.bookId ? { ...b, rating: updated?.rating ?? rating, totalRatings: updated?.totalRatings ?? b.totalRatings } : b
-            ));
-            localStorage.setItem(key, JSON.stringify(updatedBooks));
-          }
+          this.libraryService.updateLibraryItem(userId, book.bookId, { rating }).subscribe({
+            error: (err) => {
+              if (err?.status === 404) {
+                this.libraryService.addToLibrary(userId, { bookId: book.bookId, rating, dateAdded: new Date() }).subscribe(() => {});
+              }
+            }
+          });
         }
 
         this.submittingRatingFor = null;
