@@ -165,7 +165,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (!id) return 0;
     if (this.randomRatings.has(id)) return this.randomRatings.get(id)!;
     // Random between 3.0 and 5.0, rounded to 0.5 steps
-    const min = 3.0;
+    const min = 1.0;
     const max = 5.0;
     const raw = min + Math.random() * (max - min);
     const val = Math.round(raw * 2) / 2;
