@@ -9,7 +9,7 @@
     <p><strong>Type:</strong> {{ book.type }}</p>
     <div class="price">
       <p><strong>Buy:</strong> ₹{{ book.priceBuy }}</p>
-      <p><strong>Rent:</strong> ₹{{ book.priceRent }}</p>
+      <!-- <p><strong>Rent:</strong> ₹{{ book.priceRent }}</p> -->
     </div>
     <div *ngIf="book.type === 'physical'" class="action-section">
       <p>
